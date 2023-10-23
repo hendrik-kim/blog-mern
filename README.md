@@ -6,11 +6,11 @@ To run this project locally, follow these steps:
 
 1. **Clone the Repository:**  
    ```bash
-   git clone https://github.com/hendrik-kim/blog-mevn.git
+   git clone https://github.com/hendrik-kim/blog-mern.git
 
 2. **Navigate into the Cloned Repository:**  
    ```bash
-   cd blog-mevn
+   cd blog-mern
 
 3. **Install Dependencies in the Root Directory:**  
    Navigate to the root directory and run the following command to install all required dependencies for the backend.  
