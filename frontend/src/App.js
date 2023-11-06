@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from './store/configureStore';
+import BlogPostForm from './example/BlogPostForm'; // Example component for blog posting
+import UserProfile from './example/UserProfile'; // Example component for user profile
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <div>
+        {/* Your application components go here */}
+        <UserProfile />
+        <BlogPostForm />
+        {/* You can also use Routes from react-router-dom to navigate between these components */}
+      </div>
+    </Provider>
   );
 }
 
