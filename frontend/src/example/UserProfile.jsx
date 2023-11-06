@@ -4,7 +4,7 @@ import { signInUser, signOut } from '../slices/authSlice';
 
 function UserProfile() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.account.user);
+  const user = useAppSelector((state) => state.account.user).user;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +20,7 @@ function UserProfile() {
     <div>
       {user ? (
         <div>
-          <p>{`Welcome, ${user.name}`}</p>
+          <p>{`Welcome, ${user.username}`}</p>
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
