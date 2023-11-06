@@ -15,7 +15,16 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 const createPost = asyncHandler(async (req, res) => {
-  // Code Implementation Part
+  const { content } = req.body;
+
+  if (!content || content.trim() === '') {
+    res.status(400).json({ message: 'Content cannot be empty' });
+    return;
+  }
+
+  console.log('Received content:', content);
+
+  res.status(201).json({ message: 'Post created successfully', content });
 });
 
 const updatePost = asyncHandler(async (req, res) => {

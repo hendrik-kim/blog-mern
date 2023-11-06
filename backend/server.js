@@ -8,7 +8,7 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import postRoutes from './routes/postRoutes.js';
-// import userRoutes from './routes/userRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 const envFile =
@@ -38,10 +38,16 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use('/api/posts', postRoutes);
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
