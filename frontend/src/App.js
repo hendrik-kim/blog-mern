@@ -1,8 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { store } from "./store/configureStore";
+
 import BlogPostPage from "./components/BlogPostPage"; // Example component for blog posting
-import UserProfile from "./example/UserProfile"; // Example component for user profile
+import UserProfromfile  "./example/UserProfile"; // Example component for user profile
 
 function App() {
   return (
