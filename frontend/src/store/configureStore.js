@@ -1,7 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import accountSlice from '../slices/accountSlice';
-import blogReducer from '../slices/blogSlice';
+
+import { configureStore } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import accountSlice from "../slices/authSlice";
+import blogReducer from "../slices/blogSlice";
+import postsReducer from "../slices/postSlice";
+
 
 // Import other necessary slices
 
@@ -11,7 +14,7 @@ export const store = configureStore({
     // Combine reducers from different slices
     account: accountSlice,
     blog: blogReducer,
-    // Include other reducers as needed
+    posts: postsReducer,
   },
 });
 
