@@ -13,7 +13,6 @@ export const store = configureStore({
     account: accountSlice,
     blog: blogReducer,
     posts: postsReducer,
-    // Include other reducers as needed
   },
 });
 
