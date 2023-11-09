@@ -39,8 +39,12 @@ const agent = {
     register: (values) => requests.post('users/register', values),
   },
   Blog: {
-    postArticle: (article) => requests.post('posts', article),
-    // Other blog-related functionalities...
+    getPosts: () => requests.get('/api/posts'),
+    getPostById: (id) => requests.get(`/api/posts/${id}`),
+    deletePost: (id) => requests.delete(`/api/posts/${id}`),
+    createPost: (article) => requests.post('/api/posts', article),
+    updatePost: (id, article) => requests.put(`/api/posts/${id}`, article),
+    postArticle: (article) => requests.post('posts', article), // Example
   },
   // Other functionalities as needed (uncomment or add as required)
 };
