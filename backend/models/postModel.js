@@ -55,6 +55,11 @@ const postSchema = mongoose.Schema(
       required: true,
       default: 1,
     },
+    isPublic: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
   },
   {
     timestamps: true,
