@@ -90,4 +90,38 @@ const updatePost = asyncHandler(async (req, res) => {
   }
 });
 
-export { getPosts, getPostById, deletePost, createPost, updatePost };
+/**
+ * @route   Post /api/posts/:id
+ * @desc    Add a comment to a post with an ID
+ * @access  Public
+ */
+const addCommentToPost = asyncHandler(async (req, res) => {
+  const { postId, userId, content } = req.body;
+
+  const post = await Post.findById(postId);
+  if (!post) {
+    res.status(404);
+    throw new Error('Post not found');
+  }
+
+  const comment = new Comment({
+    postId,
+    userId,
+    content,
+  });
+
+  const savedComment = await comment.save();
+  post.comments.push(savedComment._id);
+  await post.save();
+
+  res.status(201).json(savedComment);
+});
+
+export {
+  getPosts,
+  getPostById,
+  deletePost,
+  createPost,
+  updatePost,
+  addCommentToPost,
+};

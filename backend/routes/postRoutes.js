@@ -6,9 +6,15 @@ import {
   deletePost,
   createPost,
   updatePost,
+  addCommentToPost,
 } from '../controllers/postController.js';
 
 router.route('/').get(getPosts).post(createPost);
-router.route('/:id').get(getPostById).delete(deletePost).put(updatePost);
+router
+  .route('/:id')
+  .get(getPostById)
+  .delete(deletePost)
+  .put(updatePost)
+  .post(addCommentToPost);
 
 export default router;
