@@ -10,7 +10,7 @@ import { fileURLToPath } from 'url';
 import connectDB from './config/database.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import categoryRoutes from './routes/caategoryRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 dotenv.config();
 const envFile =
