@@ -7,9 +7,10 @@ import cors from 'cors';
 import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import connectDB from './config/database.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import connectDB from './config/database.js';
+import categoryRoutes from './routes/caategoryRoutes.js';
 
 dotenv.config();
 const envFile =
@@ -35,6 +36,7 @@ app.use(express.json());
 
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/categories', userRoutes);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
