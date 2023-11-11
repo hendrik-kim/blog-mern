@@ -16,12 +16,22 @@ const userSchema = mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: function () {
+        return !this.isOAuthUser;
+      },
       minlength: [6, 'Password must be at least 6 characters'],
     },
     isAdmin: {
       type: Boolean,
       required: true,
+      default: false,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+    },
+    isOAuthUser: {
+      type: Boolean,
       default: false,
     },
   },

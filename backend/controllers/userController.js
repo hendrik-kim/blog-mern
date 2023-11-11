@@ -1,6 +1,73 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import generateToken from '../utilities/generateToken.js';
+import passport from 'passport';
+import GoogleStrategy from 'passport-google-oauth20';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const envFile =
+  process.env.NODE_ENV === 'production'
+    ? '.env.production'
+    : '.env.development';
+dotenv.config({ path: envFile });
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: '/api/users/google/callback',
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      const email = profile.emails[0].value;
+      let user = await User.findOne({ email });
+
+      if (user) {
+        if (!user.googleId) {
+          user.googleId = profile.id;
+          user.isOAuthUser = true;
+          await user.save();
+        }
+        return done(null, user);
+      } else {
+        user = await User.create({
+          username: profile.displayName,
+          email,
+          googleId: profile.id,
+          isOAuthUser: true,
+        });
+        return done(null, user);
+      }
+    }
+  )
+);
+
+const googleLogin = passport.authenticate('google', {
+  scope: ['profile', 'email'],
+});
+
+const googleCallback = asyncHandler(
+  (req, res, next) => {
+    passport.authenticate('google', (err, user) => {
+      if (err || !user) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+
+      req.user = user;
+      next();
+    })(req, res, next);
+  },
+  async (req, res) => {
+    generateToken(res, req.user._id);
+    res.json({
+      _id: req.user._id,
+      username: req.user.username,
+      email: req.user.email,
+      isAdmin: req.user.isAdmin,
+    });
+  }
+);
 
 /**
  * @route   POST /api/users/login
@@ -141,4 +208,6 @@ export {
   getUserById,
   updateUser,
   deleteUser,
+  googleLogin,
+  googleCallback,
 };
