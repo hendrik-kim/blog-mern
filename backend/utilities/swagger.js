@@ -144,6 +144,23 @@ const swaggerDefinition = {
           },
         },
       },
+      Category: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string',
+            description: 'Unique identifier for the category',
+          },
+          name: {
+            type: 'string',
+            description: 'Name of the category',
+          },
+          description: {
+            type: 'string',
+            description: 'Description of the category',
+          },
+        },
+      },
     },
   },
 };
