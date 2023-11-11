@@ -37,11 +37,19 @@ const agent = {
     deletePost: (id) => requests.delete(`/api/posts/${id}`),
     createPost: (post) => requests.post('/api/posts', post),
     updatePost: (id, post) => requests.put(`/api/posts/${id}`, post),
-    postArticle: (article) => requests.post('/posts', article),
+    postArticle: (article) => requests.post('/posts', article), // TODO: Exercise code to remove in the future
   },
   Users: {
     getAllUsers: () => requests.get('/api/users'),
     getUserById: (id) => requests.get(`/api/users/${id}`),
+  },
+  Category: {
+    getCategories: () => requests.get('/api/categories'),
+    getCategoryById: (id) => requests.get(`/api/categories/${id}`),
+    createCategory: (category) => requests.post('/api/categories', category),
+    updateCategory: (id, category) =>
+      requests.put(`/api/categories/${id}`, category),
+    deleteCategory: (id) => requests.delete(`/api/categories/${id}`),
   },
 };
 

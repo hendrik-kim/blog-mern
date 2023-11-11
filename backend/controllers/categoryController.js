@@ -31,7 +31,7 @@ const getCategoryById = asyncHandler(async (req, res) => {
  * @access  Public
  */
 const createCategory = asyncHandler(async (req, res) => {
-  const { name, subcategories, parentId } = req.body;
+  const { name, parentId } = req.body;
 
   if (!name || name.trim() === '') {
     res.status(400).json({ message: 'Name cannot be empty' });
@@ -40,7 +40,6 @@ const createCategory = asyncHandler(async (req, res) => {
 
   const category = new Category({
     name,
-    subcategories,
     parentId,
   });
 
@@ -54,12 +53,11 @@ const createCategory = asyncHandler(async (req, res) => {
  * @access  Public
  */
 const updateCategory = asyncHandler(async (req, res) => {
-  const { name, subcategories, parentId } = req.body;
+  const { name, parentId } = req.body;
   const category = await Category.findById(req.params.id);
 
   if (category) {
     category.name = name || category.name;
-    category.subcategories = subcategories || category.subcategories;
     category.parentId = parentId || category.parentId;
 
     const updatedCategory = await category.save();

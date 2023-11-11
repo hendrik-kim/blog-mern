@@ -6,11 +6,6 @@ const categorySchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    subcategories: [
-      {
-        type: String,
-      },
-    ],
     parentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
