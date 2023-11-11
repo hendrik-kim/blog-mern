@@ -8,6 +8,7 @@ import {
   updateUser,
   deleteUser,
 } from '../controllers/userController.js';
+import passport from 'passport';
 
 /**
  * @swagger
@@ -156,5 +157,41 @@ router.put('/:id', updateUser);
  *         description: User not found
  */
 router.delete('/:id', deleteUser);
+
+/**
+ * @swagger
+ * /google:
+ *   get:
+ *     summary: Redirect to Google OAuth login
+ *     tags: [Auth]
+ *     description: Redirects the user to Google for authentication. After the user authenticates with Google, they will be redirected to the Google callback endpoint.
+ *     responses:
+ *       302:
+ *         description: Redirect to Google's OAuth 2.0 server
+ */
+
+/**
+ * @swagger
+ * /google/callback:
+ *   get:
+ *     summary: Google OAuth callback endpoint
+ *     tags: [Auth]
+ *     description: Handles the response from Google OAuth and redirects to the home page with a token if authentication is successful, or redirects to the login page if it fails.
+ *     responses:
+ *       302:
+ *         description: Redirect to the home page with a token on successful authentication or redirect to the login page on failure
+ */
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    const token = generateToken(req.user._id);
+    res.redirect('/?token=' + token);
+  }
+);
 
 export default router;
