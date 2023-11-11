@@ -8,11 +8,11 @@ const AddPostForm = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedOption, setSelectedOption] = useState("public");
-  const [showPostList, setShowPostList] = useState(false); // State for controlling visibility
+  const [showPostList, setShowPostList] = useState(false);
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
-  //trigger with the button to save the content
+
   const handleOnChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -75,7 +75,7 @@ const AddPostForm = () => {
         <button type="button" onClick={togglePostList}>
           Check the public posting
         </button>
-        {showPostList && <PostList />} {/* Conditionally render the PostList */}
+        {showPostList && <PostList />}
       </section>
     </div>
   );
