@@ -11,6 +11,8 @@ import connectDB from './config/database.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './utilities/swagger.js';
 
 dotenv.config();
 const envFile =
@@ -36,7 +38,8 @@ app.use(express.json());
 
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/categories', userRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
