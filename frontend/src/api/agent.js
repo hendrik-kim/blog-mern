@@ -28,28 +28,28 @@ const requests = {
 
 const agent = {
   Account: {
-    login: (values) => requests.post('/api/users/login', values),
-    register: (values) => requests.post('/api/users/register', values),
+    login: (values) => requests.post('/users/login', values),
+    register: (values) => requests.post('/users/register', values),
   },
   Blog: {
-    getPosts: () => requests.get('/api/posts'),
-    getPostById: (id) => requests.get(`/api/posts/${id}`),
-    deletePost: (id) => requests.delete(`/api/posts/${id}`),
-    createPost: (post) => requests.post('/api/posts', post),
-    updatePost: (id, post) => requests.put(`/api/posts/${id}`, post),
+    getPosts: () => requests.get('/posts'),
+    getPostById: (id) => requests.get(`/posts/${id}`),
+    deletePost: (id) => requests.delete(`/posts/${id}`),
+    createPost: (post) => requests.post('/posts', post),
+    updatePost: (id, post) => requests.put(`/posts/${id}`, post),
     postArticle: (article) => requests.post('/posts', article), // TODO: Exercise code to remove in the future
   },
   Users: {
-    getAllUsers: () => requests.get('/api/users'),
-    getUserById: (id) => requests.get(`/api/users/${id}`),
+    getAllUsers: () => requests.get('/users'),
+    getUserById: (id) => requests.get(`/users/${id}`),
   },
   Category: {
-    getCategories: () => requests.get('/api/categories'),
-    getCategoryById: (id) => requests.get(`/api/categories/${id}`),
-    createCategory: (category) => requests.post('/api/categories', category),
+    getCategories: () => requests.get('/categories'),
+    getCategoryById: (id) => requests.get(`/categories/${id}`),
+    createCategory: (category) => requests.post('/categories', category),
     updateCategory: (id, category) =>
-      requests.put(`/api/categories/${id}`, category),
-    deleteCategory: (id) => requests.delete(`/api/categories/${id}`),
+      requests.put(`/categories/${id}`, category),
+    deleteCategory: (id) => requests.delete(`/categories/${id}`),
   },
 };
 
