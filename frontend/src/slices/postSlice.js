@@ -23,12 +23,14 @@ const initialState = [
     title: "First title",
     content: "First content",
     selectedOption: "public",
+    timestamp: "8:12:24PM",
   },
   {
     status: "idle",
     title: "Second title",
     content: "Second content",
     selectedOption: "public",
+    timestamp: "8:12:29PM",
   },
 ];
 
@@ -41,12 +43,14 @@ const postsSlice = createSlice({
         state.push(action.payload);
       },
       prepare(title, content, selectedOption) {
+        const timestamp = new Date().toLocaleTimeString();
         return {
           payload: {
             status: "idle",
             title,
             content,
             selectedOption,
+            timestamp,
           },
         };
       },
