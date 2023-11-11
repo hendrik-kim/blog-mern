@@ -1,15 +1,5 @@
 import mongoose from 'mongoose';
 
-const commentSchema = mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    comment: { type: String, required: true },
-  },
-  {
-    timestamps: true,
-  }
-);
-
 const likeSchema = mongoose.Schema({
   name: { type: String, required: true },
   like: { type: Number, required: true },
@@ -38,7 +28,12 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    comments: [commentSchema],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
     likes: [likeSchema],
     numComments: {
       type: Number,
@@ -54,6 +49,11 @@ const postSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 1,
+    },
+    isPublic: {
+      type: Boolean,
+      required: true,
+      default: true,
     },
   },
   {
