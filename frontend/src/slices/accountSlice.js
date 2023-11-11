@@ -7,6 +7,21 @@ const initialState = {
   blogPost: null, // Initialize blogPost state to null
 };
 
+//Asynchronous thunk for signing up an user 
+export const signUpUser = createAsyncThunk(
+  'user/signUpUser',
+  async (data, thunkAPI) => {
+    try {
+      const user = await agent.Account.register(data); //Register the user with provided data 
+      localStorage.setItem('user', JSON.stringify(user)); // Save the user to localStorage on success
+      return user; //return the user data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error); //Return error if registration fails
+    }
+  }
+)
+
+
 // Asynchronous thunk for signing in a user
 export const signInUser = createAsyncThunk(
   'user/signInUser',
@@ -38,6 +53,14 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Handle fulfilled state for singUpUser
+      .addCase(signUpUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      // Handle rejected state for singUpUser
+      .addCase(signUpUser.rejected, (state) => {
+        state.user = null;
+      })
       // Handle fulfilled state for signInUser
       .addCase(signInUser.fulfilled, (state, action) => {
         state.user = action.payload; // Set user state to the logged-in user
