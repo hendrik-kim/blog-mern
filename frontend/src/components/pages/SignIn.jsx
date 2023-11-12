@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../store/configureStore';
-import { signInUser, signOut } from '../slices/accountSlice';
+import { useAppSelector, useAppDispatch } from '../../store/configureStore';
+import { signInUser, signOut } from '../../slices/accountSlice';
 
-function UserProfile() {
+function SignIn() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((state) => state.account.user);
   const [email, setEmail] = useState('');
@@ -44,4 +44,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default SignIn;
