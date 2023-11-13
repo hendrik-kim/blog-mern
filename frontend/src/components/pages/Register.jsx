@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAppSelector, useAppDispatch } from '../store/configureStore';
-import { signOut, signUpUser  } from "../slices/accountSlice";
+import { useAppSelector, useAppDispatch } from '../../store/configureStore';
+import { signOut, signUpUser  } from "../../slices/accountSlice";
 
 function Register() {
     const dispatch = useAppDispatch();
