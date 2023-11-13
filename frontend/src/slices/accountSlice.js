@@ -21,6 +21,17 @@ export const signUpUser = createAsyncThunk(
   }
 )
 
+export const googleAuth = createAsyncThunk(
+  'user/googleAuth', 
+  async (data, thunkAPI) => {
+    try {
+      const user = agent.Account.googleLogin();
+      return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error); //Return error if registration fails
+    }
+  }
+)
 
 // Asynchronous thunk for signing in a user
 export const signInUser = createAsyncThunk(
