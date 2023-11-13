@@ -31,7 +31,7 @@ const agent = {
     login: (values) => requests.post('/users/login', values),
     register: (values) => requests.post('/users/register', values),
     googleLogin: () => {
-      window.location.href = `${process.env.REACT_APP_API_URL}users/google`;
+      window.location.href = `${process.env.REACT_APP_API_URL}users/auth/google`;
     },
   },
   Blog: {
