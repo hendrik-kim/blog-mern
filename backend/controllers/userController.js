@@ -17,7 +17,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/users/google/callback',
+      callbackURL: '/api/users/auth/google/callback',
     },
     async (accessToken, refreshToken, profile, done) => {
       const email = profile.emails[0].value;
@@ -47,27 +47,14 @@ const googleLogin = passport.authenticate('google', {
   scope: ['profile', 'email'],
 });
 
-const googleCallback = asyncHandler(
-  (req, res, next) => {
-    passport.authenticate('google', (err, user) => {
-      if (err || !user) {
-        return res.status(401).json({ message: 'Authentication failed' });
-      }
-
-      req.user = user;
-      next();
-    })(req, res, next);
-  },
-  async (req, res) => {
-    generateToken(res, req.user._id);
-    res.json({
-      _id: req.user._id,
-      username: req.user.username,
-      email: req.user.email,
-      isAdmin: req.user.isAdmin,
-    });
+const googleCallback = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Authentication failed' });
   }
-);
+
+  generateToken(res, req.user._id);
+  res.redirect(`${process.env.APP_CLIENT_URL}/sign-in`);
+});
 
 /**
  * @route   POST /api/users/login
