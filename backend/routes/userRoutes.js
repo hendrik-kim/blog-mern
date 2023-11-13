@@ -182,11 +182,11 @@ router.delete('/:id', deleteUser);
  *         description: Redirect to the home page with a token on successful authentication or redirect to the login page on failure
  */
 router.get(
-  '/google',
+  '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 router.get(
-  '/google/callback',
+  '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
     const token = generateToken(req.user._id);
