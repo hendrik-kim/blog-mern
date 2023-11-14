@@ -1,10 +1,10 @@
+import React from "react";
 import { useSelector } from "react-redux";
 import { selectAllPosts } from "./../../slices/postSlice";
 
-function Home() {
+const Mypage = () => {
   const posts = useSelector(selectAllPosts);
-  const publicPosts = posts.filter((post) => post.selectedOption === "public");
-  const renderedPosts = publicPosts.map((post) => (
+  const renderedPosts = posts.map((post) => (
     <article key={post.id}>
       <h3>{post.title}</h3>
       <h4>{post.selectedOption}</h4>
@@ -15,12 +15,11 @@ function Home() {
   return (
     <div>
       <section>
-        {/* display only public posting */}
-        <h2>Postings in home page</h2>
+        <h2>Posting in My page</h2>
         {renderedPosts}
       </section>
     </div>
   );
-}
+};
 
-export default Home;
+export default Mypage;
