@@ -6,6 +6,7 @@ function Home() {
   const publicPosts = posts.filter((post) => post.selectedOption === "public");
   const renderedPosts = publicPosts.map((post) => (
     <article key={post.id}>
+      {/* user name required */}
       <h3>{post.title}</h3>
       <h4>{post.selectedOption}</h4>
       <p>{post.content.substring(0, 100)}</p>

@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { postAdded } from "../../slices/postSlice";
 
 const AddPostForm = () => {
+  // category section required
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

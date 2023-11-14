@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { selectAllPosts } from "./../../slices/postSlice";
 
 const Mypage = () => {
+  // category part should be displaying.
   const posts = useSelector(selectAllPosts);
   const renderedPosts = posts.map((post) => (
     <article key={post.id}>
