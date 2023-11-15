@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postAdded } from "../../slices/postSlice";
-import PostList from "../PostList";
 
 const AddPostForm = () => {
+  // category section required
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedOption, setSelectedOption] = useState("public");
-  const [showPostList, setShowPostList] = useState(false);
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
@@ -23,9 +22,6 @@ const AddPostForm = () => {
       setContent("");
       setSelectedOption("public");
     }
-  };
-  const togglePostList = () => {
-    setShowPostList(!showPostList);
   };
   return (
     <div>
@@ -72,10 +68,6 @@ const AddPostForm = () => {
             Save post
           </button>
         </form>
-        <button type="button" onClick={togglePostList}>
-          Check the public posting
-        </button>
-        {showPostList && <PostList />}
       </section>
     </div>
   );

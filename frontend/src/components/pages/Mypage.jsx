@@ -1,10 +1,11 @@
+import React from "react";
 import { useSelector } from "react-redux";
-import { selectAllPosts } from "../slices/postSlice";
+import { selectAllPosts } from "./../../slices/postSlice";
 
-const PostList = () => {
+const Mypage = () => {
+  // category part should be displaying.
   const posts = useSelector(selectAllPosts);
-  const publicPosts = posts.filter((post) => post.selectedOption === "public");
-  const renderedPosts = publicPosts.map((post) => (
+  const renderedPosts = posts.map((post) => (
     <article key={post.id}>
       <h3>{post.title}</h3>
       <h4>{post.selectedOption}</h4>
@@ -15,11 +16,11 @@ const PostList = () => {
   return (
     <div>
       <section>
-        <h2>Posts</h2>
+        <h2>Posting in My page</h2>
         {renderedPosts}
       </section>
     </div>
   );
 };
 
-export default PostList;
+export default Mypage;
