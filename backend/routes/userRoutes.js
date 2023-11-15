@@ -6,10 +6,8 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  googleLogin,
-  googleCallback,
+  signOut
 } from '../controllers/userController.js';
-import passport from 'passport';
 
 const router = express.Router();
 
@@ -185,12 +183,6 @@ router.delete('/:id', deleteUser);
  *         description: Redirect to the home page with a token on successful authentication or redirect to the login page on failure
  */
 
-router.get('/auth/google', googleLogin);
-
-router.get(
-  '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/sign-in' }),
-  googleCallback
-);
+router.post('/signout', signOut);
 
 export default router;

@@ -29,10 +29,12 @@ const requests = {
 const agent = {
   Account: {
     login: (values) => requests.post('/users/login', values),
+    signOut: () => requests.post('/users/signout'),
     register: (values) => requests.post('/users/register', values),
     googleLogin: () => {
-      window.location.href = `${process.env.REACT_APP_API_URL}users/auth/google`;
+      window.location.href = `${process.env.REACT_APP_API_URL}auth/google`;
     },
+    validateSession: () => requests.get('/auth/validate'),
   },
   Blog: {
     getPosts: () => requests.get('/posts'),

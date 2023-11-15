@@ -8,11 +8,13 @@ import { fileURLToPath } from 'url';
 import connectDB from './config/database.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import swaggerDocument from './utilities/swagger.js';
 import passportConfig from './config/passportConfig.js';
 import swaggerUi from 'swagger-ui-express';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
 dotenv.config();
@@ -48,8 +50,11 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(cookieParser());
 app.use(express.json());
 
+app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/categories', categoryRoutes);
