@@ -28,7 +28,6 @@ export const signInUser = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const user = await agent.Account.login(data); // Attempt to login with provided data
-      localStorage.setItem('user', JSON.stringify(user)); // Save the user to localStorage on success
       return user; // Return the user data
     } catch (error) {
       return thunkAPI.rejectWithValue(error); // Return error if login fails

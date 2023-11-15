@@ -28,7 +28,7 @@ const validateToken = asyncHandler(async (req, res) => {
 
     const user = await User.findOne(
       { _id: decoded.userId },
-      { googleId: 0, createdAt: 0, updatedAt:0} //return all except unnecessary fields.  
+      { _id: 1, username: 1, email:1, isAdmin: 1, isOAuthUser:1 } //return all necessary fields.  
       );
 
     return res.json({ isAuthenticated: true, user: user });
@@ -74,7 +74,6 @@ const googleCallback = asyncHandler(async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Authentication failed' });
   }
-  console.log(req.user);
   generateToken(res, req.user._id);
   res.redirect(`${process.env.APP_CLIENT_URL}`);
 });
