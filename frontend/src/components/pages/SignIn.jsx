@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/configureStore';
-import { signInUser, signOut } from '../../slices/accountSlice';
+import { signInUser, signOutUser } from '../../slices/accountSlice';
 import GoogleAuth from '../GoogleAuth';
 
 function SignIn() {
@@ -14,7 +14,7 @@ function SignIn() {
   };
 
   const handleLogout = () => {
-    dispatch(signOut());
+    dispatch(signOutUser());
   };
 
   return (
