@@ -9,7 +9,7 @@ const initialState = {
   blogPost: null,
 };
 
-// Asynchronous thunks
+// Asynchronous thunk for signing up an user 
 export const signUpUser = createAsyncThunk(
   'user/signUpUser',
   async (data, thunkAPI) => {
@@ -22,6 +22,7 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
+// Asynchronous thunk for signing in a user
 export const signInUser = createAsyncThunk(
   'user/signInUser',
   async (data, thunkAPI) => {
@@ -47,16 +48,18 @@ export const signOutUser = createAsyncThunk(
   }
 );
 
+
 export const googleAuth = createAsyncThunk(
-  'user/googleAuth',
-  async (data, thunkAPI) => {
+  'user/googleAuth', 
+  async (_, thunkAPI) => {
     try {
-      await agent.Account.googleLogin();
+      const response = await agent.Account.googleLogin();
+      return response;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error); //Return error if registration fails
+      return thunkAPI.rejectWithValue(error);
     }
   }
-);
+)
 
 export const validateUserSession = createAsyncThunk(
   'user/validateUserSession',
@@ -74,10 +77,6 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // signOut: (state) => {
-    //   state.user = null;
-    //   state.isAuthenticated = false;
-    // },
     setUser: (state, action) => {
       state.user = action.payload;
     },
