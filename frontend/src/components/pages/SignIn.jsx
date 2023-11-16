@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/configureStore';
-import { signInUser, signOut } from '../../slices/accountSlice';
+import { signInUser, signOutUser } from '../../slices/accountSlice';
+import GoogleAuth from '../GoogleAuth';
 
 function SignIn() {
   const dispatch = useAppDispatch();
@@ -13,7 +14,7 @@ function SignIn() {
   };
 
   const handleLogout = () => {
-    dispatch(signOut());
+    dispatch(signOutUser());
   };
 
   return (
@@ -40,6 +41,7 @@ function SignIn() {
           <button onClick={handleLogin}>Login</button>
         </div>
       )}
+      <GoogleAuth />
     </div>
   );
 }

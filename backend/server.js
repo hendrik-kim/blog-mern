@@ -1,8 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import colors from 'colors';
 import morgan from 'morgan';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
 import { dirname } from 'path';
@@ -10,9 +8,14 @@ import { fileURLToPath } from 'url';
 import connectDB from './config/database.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
-import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './utilities/swagger.js';
+import passportConfig from './config/passportConfig.js';
+import swaggerUi from 'swagger-ui-express';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
 
 dotenv.config();
 const envFile =
@@ -29,13 +32,29 @@ const __dirname = dirname(__filename);
 const app = express();
 
 app.use(
+  session({
+    secret: 'temp_session_key', // FIXME: Need to generate and use the proper session key later.
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passportConfig();
+
+app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: process.env.APP_CLIENT_URL,
     credentials: true,
   })
 );
+
+app.use(cookieParser());
 app.use(express.json());
 
+app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/categories', categoryRoutes);

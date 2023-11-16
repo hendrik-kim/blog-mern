@@ -1,5 +1,4 @@
 import express from 'express';
-const router = express.Router();
 import {
   loginUser,
   registerUser,
@@ -7,8 +6,10 @@ import {
   getUserById,
   updateUser,
   deleteUser,
+  signOut
 } from '../controllers/userController.js';
-import passport from 'passport';
+
+const router = express.Router();
 
 /**
  * @swagger
@@ -181,17 +182,7 @@ router.delete('/:id', deleteUser);
  *       302:
  *         description: Redirect to the home page with a token on successful authentication or redirect to the login page on failure
  */
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-router.get(
-  '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    const token = generateToken(req.user._id);
-    res.redirect('/?token=' + token);
-  }
-);
+
+router.post('/signout', signOut);
 
 export default router;

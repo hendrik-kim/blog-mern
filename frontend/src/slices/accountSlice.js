@@ -1,28 +1,27 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import agent from '../api/agent';
 
-// Define the initial state of the user slice, including the user and blogPost states
 const initialState = {
-  user: JSON.parse(localStorage.getItem('user') || 'null'), // Retrieve the user from localStorage if available
-  blogPost: null, // Initialize blogPost state to null
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+  blogPost: null,
 };
 
-//Asynchronous thunk for signing up an user 
+// Asynchronous thunks
 export const signUpUser = createAsyncThunk(
   'user/signUpUser',
   async (data, thunkAPI) => {
     try {
-      const user = await agent.Account.register(data); //Register the user with provided data 
-      localStorage.setItem('user', JSON.stringify(user)); // Save the user to localStorage on success
-      return user; //return the user data
+      const response = await agent.Account.register(data);
+      return response.user;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error); //Return error if registration fails
+      return thunkAPI.rejectWithValue(error);
     }
   }
-)
+);
 
-
-// Asynchronous thunk for signing in a user
 export const signInUser = createAsyncThunk(
   'user/signInUser',
   async (data, thunkAPI) => {
@@ -36,44 +35,90 @@ export const signInUser = createAsyncThunk(
   }
 );
 
-// Create a slice for user-related state and actions
+export const signOutUser = createAsyncThunk(
+  'user/signOutUser',
+  async (data, thunkAPI) => {
+    try {
+      const response = await agent.Account.signOut();
+      return response.message;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const googleAuth = createAsyncThunk(
+  'user/googleAuth',
+  async (data, thunkAPI) => {
+    try {
+      await agent.Account.googleLogin();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error); //Return error if registration fails
+    }
+  }
+);
+
+export const validateUserSession = createAsyncThunk(
+  'user/validateUserSession',
+  async (_, thunkAPI) => {
+    try {
+      const response = await agent.Account.validateSession();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
-  name: 'user', // Name of the slice
-  initialState, // Initial state of the slice
+  name: 'user',
+  initialState,
   reducers: {
-    // Reducer to handle user sign out
-    signOut: (state) => {
-      state.user = null; // Set user state to null
-      localStorage.removeItem('user'); // Remove user from localStorage
-    },
-    // Reducer to manually set user state
+    // signOut: (state) => {
+    //   state.user = null;
+    //   state.isAuthenticated = false;
+    // },
     setUser: (state, action) => {
-      state.user = action.payload; // Update the user state with given payload
+      state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Handle fulfilled state for singUpUser
       .addCase(signUpUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isAuthenticated = true;
       })
-      // Handle rejected state for singUpUser
-      .addCase(signUpUser.rejected, (state) => {
-        state.user = null;
-      })
-      // Handle fulfilled state for signInUser
       .addCase(signInUser.fulfilled, (state, action) => {
-        state.user = action.payload; // Set user state to the logged-in user
+        state.user = action.payload;
+        state.isAuthenticated = true;
       })
-      // Handle rejected state for signInUser
-      .addCase(signInUser.rejected, (state) => {
-        state.user = null; // Reset user state to null on login failure
-      });
+      .addCase(googleAuth.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      .addCase(validateUserSession.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(validateUserSession.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.isAuthenticated = action.payload.isAuthenticated;
+        state.loading = false;
+      })
+      .addCase(validateUserSession.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      })
+      .addCase(signOutUser.fulfilled, (state, action) => {
+        state.user = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(signOutUser.rejected, (state, action) => {
+        // TODO: Handle sign-out error
+      })
+      .addDefaultCase((state, action) => {});
   },
 });
 
-// Export actions from the slice
-export const { signOut, setUser } = userSlice.actions;
+export const { setUser } = userSlice.actions;
 
-// Export the reducer from the slice
 export default userSlice.reducer;
