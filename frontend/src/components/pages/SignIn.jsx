@@ -39,9 +39,10 @@ function SignIn() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button onClick={handleLogin}>Login</button>
+          <p> Or </p>
+          <GoogleAuth />
         </div>
       )}
-      <GoogleAuth />
     </div>
   );
 }

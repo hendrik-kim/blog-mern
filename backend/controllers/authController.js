@@ -21,11 +21,17 @@ const validateToken = asyncHandler(async (req, res) => {
     return res.status(401).json({ isAuthenticated: false });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) {
       return res.status(401).json({ isAuthenticated: false });
     }
-    return res.json({ isAuthenticated: true, user: decoded });
+
+    const user = await User.findOne(
+      { _id: decoded.userId },
+      { _id: 1, username: 1, email:1, isAdmin: 1, isOAuthUser:1 } //return all necessary fields.  
+      );
+
+    return res.json({ isAuthenticated: true, user: user });
   });
 });
 
@@ -68,9 +74,9 @@ const googleCallback = asyncHandler(async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Authentication failed' });
   }
-
+  
   generateToken(res, req.user._id);
-  res.redirect(`${process.env.APP_CLIENT_URL}/sign-in`);
+  res.redirect(`${process.env.APP_CLIENT_URL}`);
 });
 
 export { validateToken, googleLogin, googleCallback };
