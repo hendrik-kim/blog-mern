@@ -74,6 +74,7 @@ const googleCallback = asyncHandler(async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Authentication failed' });
   }
+  
   generateToken(res, req.user._id);
   res.redirect(`${process.env.APP_CLIENT_URL}`);
 });

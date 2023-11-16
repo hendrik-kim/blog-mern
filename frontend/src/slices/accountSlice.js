@@ -22,7 +22,6 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
-// Asynchronous thunk for signing in a user
 export const signInUser = createAsyncThunk(
   'user/signInUser',
   async (data, thunkAPI) => {
@@ -46,7 +45,6 @@ export const signOutUser = createAsyncThunk(
     }
   }
 );
-
 
 export const googleAuth = createAsyncThunk(
   'user/googleAuth', 

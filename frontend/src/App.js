@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './store/configureStore';
 import { Provider } from 'react-redux';
+
 import { persistor, store } from './store/configureStore';
 import { validateUserSession } from './slices/accountSlice';
 import RootLayout from './layouts/RootLayout';

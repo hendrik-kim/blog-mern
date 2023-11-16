@@ -43,7 +43,6 @@ function SignIn() {
           <GoogleAuth />
         </div>
       )}
-      
     </div>
   );
 }
