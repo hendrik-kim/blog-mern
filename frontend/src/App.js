@@ -18,6 +18,7 @@ function App() {
 
   return (
     <Provider store={store}>
+    {/* Delay the rendering of our app's UI until the persisted state has been retrieved and saved to redux */}
       <PersistGate loading={null} persistor={persistor}>
         <RootLayout />    
       </PersistGate>

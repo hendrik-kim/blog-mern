@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer, REGISTER, REHYDRATE, PERSIST } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import accountSlice from '../slices/accountSlice';
 import blogReducer from '../slices/blogSlice';
@@ -24,7 +24,11 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 // Configure the Redux store
 export const store = configureStore({
   reducer: persistedReducer,
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+      ignoreActions: [REGISTER, REHYDRATE, PERSIST],
+    },
+  }),
 });
 
 // Custom hook to use with useDispatch

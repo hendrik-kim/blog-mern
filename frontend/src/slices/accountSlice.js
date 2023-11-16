@@ -14,8 +14,8 @@ export const signUpUser = createAsyncThunk(
   'user/signUpUser',
   async (data, thunkAPI) => {
     try {
-      const response = await agent.Account.register(data);
-      return response.user;
+      const user = await agent.Account.register(data);
+      return user;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
