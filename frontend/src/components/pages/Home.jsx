@@ -3,12 +3,13 @@ import { selectAllPosts } from "./../../slices/postSlice";
 
 function Home() {
   const posts = useSelector(selectAllPosts);
-  const publicPosts = posts.filter((post) => post.selectedOption === "public");
+  console.log("home", posts);
+  const publicPosts = posts.filter((post) => post.postVisibility === "public");
   const renderedPosts = publicPosts.map((post) => (
     <article key={post.id}>
       {/* user name required */}
       <h3>{post.title}</h3>
-      <h4>{post.selectedOption}</h4>
+      <h4>{post.postVisibility}</h4>
       <p>{post.content.substring(0, 100)}</p>
       <p>posting time: {post.timestamp}</p>
     </article>

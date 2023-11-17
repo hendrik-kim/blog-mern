@@ -22,15 +22,8 @@ const initialState = [
     status: "idle",
     title: "First title",
     content: "First content",
-    selectedOption: "public",
+    postVisibility: "public",
     timestamp: "8:12:24PM",
-  },
-  {
-    status: "idle",
-    title: "Second title",
-    content: "Second content",
-    selectedOption: "public",
-    timestamp: "8:12:29PM",
   },
 ];
 
@@ -42,14 +35,14 @@ const postsSlice = createSlice({
       reducer(state, action) {
         state.push(action.payload);
       },
-      prepare(title, content, selectedOption) {
+      prepare(title, content, postVisibility) {
         const timestamp = new Date().toLocaleTimeString();
         return {
           payload: {
             status: "idle",
             title,
             content,
-            selectedOption,
+            postVisibility,
             timestamp,
           },
         };

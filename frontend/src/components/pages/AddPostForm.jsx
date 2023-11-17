@@ -7,21 +7,21 @@ const AddPostForm = () => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isPublic, setIsPublic] = useState(true);
+  const [postVisibility, setPostVisibility] = useState("public");
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
 
-  const handleOnChange = (e) => {
-    setIsPublic(e.target.value == "public");
+  const handleVisibilityChange = (e) => {
+    setPostVisibility(e.target.value);
   };
 
   const onSavePostClicked = () => {
     if (title && content) {
-      dispatch(postAdded(title, content, isPublic ? "public" : "private"));
+      dispatch(postAdded(title, content, postVisibility));
       setTitle("");
       setContent("");
-      setIsPublic(true);
+      setPostVisibility("public");
     }
   };
   return (
@@ -35,8 +35,8 @@ const AddPostForm = () => {
               type="radio"
               name="posting-visibility-status"
               value="public"
-              checked={isPublic}
-              onChange={handleOnChange}
+              checked={postVisibility === "public"}
+              onChange={handleVisibilityChange}
             />
             Public
           </label>
@@ -45,8 +45,8 @@ const AddPostForm = () => {
               type="radio"
               name="posting-status"
               value="private"
-              checked={!isPublic}
-              onChange={handleOnChange}
+              checked={postVisibility === "private"}
+              onChange={handleVisibilityChange}
             />
             Private
           </label>
