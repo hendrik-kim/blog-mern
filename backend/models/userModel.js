@@ -1,25 +1,25 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
-import validator from 'validator';
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import validator from "validator";
 
 const userSchema = mongoose.Schema(
   {
     username: {
       type: String,
-      required: [true, 'Username is required'],
+      required: [true, "Username is required"],
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Email is required"],
       unique: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
+      validate: [validator.isEmail, "Please provide a valid email"],
     },
     password: {
       type: String,
       required: function () {
         return !this.isOAuthUser;
       },
-      minlength: [6, 'Password must be at least 6 characters'],
+      minlength: [6, "Password must be at least 6 characters"],
     },
     isAdmin: {
       type: Boolean,
@@ -29,6 +29,7 @@ const userSchema = mongoose.Schema(
     googleId: {
       type: String,
       unique: true,
+      sparse: true,
     },
     isOAuthUser: {
       type: Boolean,
@@ -45,8 +46,8 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     return next();
   }
 
@@ -59,6 +60,6 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

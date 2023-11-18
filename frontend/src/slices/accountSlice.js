@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage";
+
 import agent from "../api/agent";
 
 const initialState = {
   user: {
-    email: '',
+    email: "",
     isAdmin: null,
     isOAuthUser: null,
-    username: '',
-    _id: '',
+    username: "",
+    _id: "",
   },
   isAuthenticated: false,
   loading: false,
-  error: null,
   blogPost: null,
 };
 
@@ -93,6 +94,7 @@ const userSlice = createSlice({
       .addCase(signInUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthenticated = true;
+        state.loading = false;
       })
       .addCase(googleAuth.fulfilled, (state, action) => {
         state.user = action.payload;
@@ -110,13 +112,14 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(validateUserSession.rejected, (state, action) => {
-        state.error = action.payload;
         state.loading = false;
         state.isAuthenticated = false;
       })
       .addCase(signOutUser.fulfilled, (state, action) => {
         state.user = null;
         state.isAuthenticated = false;
+        storage.removeItem("persist:account");
+        storage.removeItem("user");
       })
       .addCase(signOutUser.rejected, (state, action) => {
         // TODO: Handle sign-out error
@@ -126,5 +129,9 @@ const userSlice = createSlice({
 });
 
 export const { setUser } = userSlice.actions;
+
+export const selectUser = (state) => state.account.user;
+export const selectIsAuthenticated = (state) => state.account.isAuthenticated;
+export const selectLoading = (state) => state.account.loading;
 
 export default userSlice.reducer;

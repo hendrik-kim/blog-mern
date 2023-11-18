@@ -1,13 +1,14 @@
-import asyncHandler from 'express-async-handler';
-import User from '../models/userModel.js';
-import generateToken from '../utilities/generateToken.js';
-import dotenv from 'dotenv';
+import asyncHandler from "express-async-handler";
+import dotenv from "dotenv";
+
+import User from "../models/userModel.js";
+import generateToken from "../utilities/generateToken.js";
 
 dotenv.config();
 const envFile =
-  process.env.NODE_ENV === 'production'
-    ? '.env.production'
-    : '.env.development';
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 dotenv.config({ path: envFile });
 
 /**
@@ -30,8 +31,8 @@ const loginUser = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
     });
   } else {
-    res.status(401);
-    throw new Error('Invalid credentials');
+    res.status(401).json({ message: "Invalid credentials" });
+    throw new Error("Invalid credentials");
   }
 });
 
@@ -45,8 +46,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const userExists = await User.findOne({ email });
   if (userExists) {
-    res.status(400);
-    throw new Error('User already exists');
+    res.status(409).json({ message: "User already exists" });
+    throw new Error("User already exists");
   }
 
   const user = await User.create({
@@ -65,8 +66,8 @@ const registerUser = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
     });
   } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+    res.status(400).json({ message: "Invalid user data" });
+    throw new Error("Invalid user data");
   }
 });
 
@@ -77,7 +78,7 @@ const registerUser = asyncHandler(async (req, res) => {
  */
 const getUsers = asyncHandler(async (req, res) => {
   //FIXME:Should be changed in the future to be viewable only by administrators
-  const users = await User.find({}).select('-password');
+  const users = await User.find({}).select("-password");
   res.json(users);
 });
 
@@ -87,12 +88,12 @@ const getUsers = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password');
+  const user = await User.findById(req.params.id).select("-password");
   if (user) {
     res.json(user);
   } else {
-    res.status(404);
-    throw new Error('User not found');
+    res.status(404).json({ message: "User not found" });
+    throw new Error("User not found");
   }
 });
 
@@ -120,8 +121,8 @@ const updateUser = asyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
     });
   } else {
-    res.status(404);
-    throw new Error('User not found');
+    res.status(404).json({ message: "User not found" });
+    throw new Error("User not found");
   }
 });
 
@@ -135,19 +136,19 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   if (user) {
     await user.deleteOne();
-    res.json({ message: 'User removed' });
+    res.json({ message: "User removed" });
   } else {
-    res.status(404);
-    throw new Error('User not found');
+    res.status(404).json({ message: "User not found" });
+    throw new Error("User not found");
   }
 });
 
 const signOut = (req, res) => {
-  res.clearCookie('jwt', {
+  res.clearCookie("jwt", {
     httpOnly: true,
   });
 
-  res.json({ message: 'Signed out successfully' });
+  res.json({ message: "Signed out successfully" });
 };
 
 export {

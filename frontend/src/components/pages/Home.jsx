@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
+import { validateUserSession } from "../../slices/accountSlice";
 import { store } from "../../store/configureStore";
 
 function Home() {
@@ -10,6 +11,9 @@ function Home() {
   useEffect(() => {
     dispatch(fetchAllPosts());
     console.log("fetched posts!", store.getState().blog.posts);
+
+    //Validate session for users who successfully authenticated and redirected from google log in page.
+    dispatch(validateUserSession());
   }, [dispatch]);
 
   const posts = useAppSelector(selectAllPosts);
