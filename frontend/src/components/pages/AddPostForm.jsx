@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { postAdded } from "../../slices/postSlice";
+import { v4 as uuidv4 } from "uuid";
 
 const AddPostForm = () => {
   // category section required
@@ -18,7 +19,14 @@ const AddPostForm = () => {
 
   const onSavePostClicked = () => {
     if (title && content) {
-      dispatch(postAdded(title, content, postVisibility));
+      const newPost = {
+        id: uuidv4(), // Generate a unique ID
+        title,
+        content,
+        postVisibility,
+      };
+
+      dispatch(postAdded(newPost));
       setTitle("");
       setContent("");
       setPostVisibility("public");
