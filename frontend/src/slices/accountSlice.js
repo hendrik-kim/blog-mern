@@ -9,7 +9,6 @@ const initialState = {
   blogPost: null,
 };
 
-// Asynchronous thunk for signing up an user 
 export const signUpUser = createAsyncThunk(
   'user/signUpUser',
   async (data, thunkAPI) => {
@@ -94,6 +93,7 @@ const userSlice = createSlice({
       })
       .addCase(validateUserSession.pending, (state) => {
         state.loading = true;
+        state.isAuthenticated = false;
       })
       .addCase(validateUserSession.fulfilled, (state, action) => {
         state.user = action.payload.user;
@@ -103,6 +103,7 @@ const userSlice = createSlice({
       .addCase(validateUserSession.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+        state.isAuthenticated = false;
       })
       .addCase(signOutUser.fulfilled, (state, action) => {
         state.user = null;

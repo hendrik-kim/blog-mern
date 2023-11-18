@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/configureStore';
 import { signOutUser, signUpUser } from '../../slices/accountSlice';
+import GoogleAuth from '../GoogleAuth';
 
 function Register() {
   const dispatch = useAppDispatch();
@@ -8,6 +9,30 @@ function Register() {
   const initialUserValue = { email: '', password: '', confirmPassword: '', username: ''};
   const [formValues, setFormValues] = useState(initialUserValue);
   const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  useEffect(() => {
+    if(Object.keys(formErrors).length === 0 && isSubmit) {
+      let email = formValues.email;
+      let password = formValues.password;
+      let username = formValues.username;
+
+      const result = async () => {
+        const res = await dispatch(signUpUser({ email, password, username }));
+        
+        //Check if there is error while signing up
+        if(res.error) {
+          const statusCode = res.payload.response.status;
+          
+          //Display error
+          if(statusCode === 400) {
+            setFormErrors({invalid: 'Account already exists. Please try to log in'});
+          } 
+        }
+      }
+      result();
+    }
+  }, [dispatch, formErrors, formValues, isSubmit])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,14 +42,7 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault(); 
     setFormErrors(validate(formValues));
-
-    if(Object.keys(formErrors).length === 0) {
-      let email = formValues.email;
-      let password = formValues.password;
-      let username = formValues.username;
-
-      dispatch(signUpUser({ email, password, username }));
-    }
+    setIsSubmit(true);
   }
 
   const validate = (values) => {
@@ -73,63 +91,72 @@ function Register() {
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
-            width: '30%',
-          }}
-        >
-          <h1>Sign Up</h1>
-          <div>
-            <input
-              type='text'
-              name='email'
-              placeholder='Email'
-              value={formValues.email}
-              onChange={handleChange}
-              style={{width: '95%'}}
-            />
-            <span>{formErrors.email}</span>
-          </div>
-          <div>
-            <input
-              type='password'
-              name='password'
-              placeholder='Password'
-              value={formValues.password}
-              onChange={handleChange}
-              style={{width: '95%'}}
-            />
-            <span>{formErrors.password}</span>
-          </div>
-          <div>
-            <input
-              type='password'
-              name='confirmPassword'
-              placeholder='Confirm Password'
-              value={formValues.confirmPassword}
-              onChange={handleChange}
-              style={{width: '95%'}}
-            />
-            <span>{formErrors.confirmPassword}</span>
-          </div>
-          <div>
-            <input
-              type='text'
-              name='username'
-              placeholder='User name'
-              value={formValues.username}
-              onChange={handleChange}
-              style={{width: '95%'}}
-            />
-            <span>{formErrors.username}</span>
-          </div>
-          
-          <button type='submit'>Register</button>
-        </form>
+        <>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+              width: '30%',
+            }}
+          >
+            <h1>Sign Up</h1>
+            <div>
+              <input
+                type='text'
+                name='email'
+                placeholder='Email'
+                value={formValues.email}
+                onChange={handleChange}
+                style={{width: '95%'}}
+              />
+              <span>{formErrors.email}</span>
+            </div>
+            <div>
+              <input
+                type='password'
+                name='password'
+                placeholder='Password'
+                value={formValues.password}
+                onChange={handleChange}
+                style={{width: '95%'}}
+              />
+              <span>{formErrors.password}</span>
+            </div>
+            <div>
+              <input
+                type='password'
+                name='confirmPassword'
+                placeholder='Confirm Password'
+                value={formValues.confirmPassword}
+                onChange={handleChange}
+                style={{width: '95%'}}
+              />
+              <span>{formErrors.confirmPassword}</span>
+            </div>
+            <div>
+              <input
+                type='text'
+                name='username'
+                placeholder='User name'
+                value={formValues.username}
+                onChange={handleChange}
+                style={{width: '95%'}}
+              />
+              <span>{formErrors.username}</span>
+            </div>
+            
+            <button type='submit'>Register</button>
+          </form>
+          <p>{
+            (formErrors.hasOwnProperty('invalid') ?
+              formErrors.invalid : ''
+            )
+            }</p>
+          <p> Or </p>
+          <GoogleAuth />
+        </>
       )}
     </div>
   );
