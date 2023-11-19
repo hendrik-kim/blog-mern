@@ -17,17 +17,7 @@ export const addPostAsync = createAsyncThunk(
   }
 );
 
-const initialState = [
-  //example
-  {
-    id: "firstid",
-    status: "idle",
-    title: "First title",
-    content: "First content",
-    postVisibility: "public",
-    timestamp: "8:12:24PM",
-  },
-];
+const initialState = [];
 
 const postsSlice = createSlice({
   name: "posts",
@@ -41,7 +31,7 @@ const postsSlice = createSlice({
         const timestamp = new Date().toLocaleTimeString();
         return {
           payload: {
-            id: uuidv4(),
+            postId: uuidv4(),
             status: "idle",
             title,
             content,
@@ -52,10 +42,10 @@ const postsSlice = createSlice({
       },
     },
     deletePosting: (state, action) => {
-      const { id } = action.payload;
-      const findId = state.find((post) => post.id === id);
+      const { postId } = action.payload;
+      const findId = state.find((post) => post.postId === postId);
       if (findId) {
-        return state.filter((f) => f.id !== id);
+        return state.filter((f) => f.postId !== postId);
       }
     },
   },

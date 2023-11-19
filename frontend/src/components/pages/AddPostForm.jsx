@@ -8,8 +8,9 @@ const AddPostForm = () => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [postId, setPostId] = useState("");
   const [postVisibility, setPostVisibility] = useState("public");
-
+  const [error, setError] = useState("");
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
 
@@ -17,19 +18,24 @@ const AddPostForm = () => {
     setPostVisibility(e.target.value);
   };
 
-  const onSavePostClicked = () => {
-    if (title && content) {
-      const newPost = {
-        id: uuidv4(), // Generate a unique ID
-        title,
-        content,
-        postVisibility,
-      };
-
-      dispatch(postAdded(newPost));
-      setTitle("");
-      setContent("");
-      setPostVisibility("public");
+  const onSavePostClicked = async () => {
+    try {
+      if (title && content) {
+        setPostId(uuidv4());
+        dispatch(postAdded(title, content, postVisibility));
+        setTitle("");
+        setContent("");
+        setPostVisibility("public");
+      } else {
+        if (!title) {
+          alert("please enter the title");
+        } else if (!content) {
+          alert("please enter the content");
+        }
+      }
+    } catch (error) {
+      console.error("Error adding post:", error);
+      setError("An error occurred while adding the post.");
     }
   };
   return (
@@ -51,7 +57,7 @@ const AddPostForm = () => {
           <label>
             <input
               type="radio"
-              name="posting-status"
+              name="posting-visibility-status"
               value="private"
               checked={postVisibility === "private"}
               onChange={handleVisibilityChange}

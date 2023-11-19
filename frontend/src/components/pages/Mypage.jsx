@@ -1,24 +1,32 @@
-import React from "react";
-import { useSelector,useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { selectAllPosts } from "./../../slices/postSlice";
 import { deletePosting } from "./../../slices/postSlice";
-const Mypage = () => {
-   const dispatch = useDispatch();
 
-  const handleDelete = (id) => {
-    dispatch(deletePosting({ id: id }));
+const Mypage = () => {
+  const dispatch = useDispatch();
+  const [error, setError] = useState(null);
+  const handleDelete = async (id) => {
+    console.log("Deleting post with id:", id);
+    try {
+      await dispatch(deletePosting({ postId: id }));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      setError("An error occurred while deleting the post.");
+    }
   };
   // category part should be displaying.
   const posts = useSelector(selectAllPosts);
-  console.log("myPage", posts);
-  const renderedPosts = posts.map((post) => (
-    <article key={post.id}>
-      <h3>{post.id}</h3>
-      <h3>{post.title.title}</h3>
-      <h4>{post.title.postVisibility}</h4>
-      <p>{post.title.content}</p>
+
+  const reversedPosts = [...posts].reverse();
+  const renderedPosts = reversedPosts.map((post, i) => (
+    <article key={i}>
+      <h3>{post.postId}</h3>
+      <h3>{post.title}</h3>
+      <h4>{post.postVisibility}</h4>
+      <p>{post.content}</p>
       <p>posting time: {post.timestamp}</p>
-      <button onClick={()=>handleDelete(post.id)}>Delete</button>
+      <button onClick={() => handleDelete(post.postId)}>Delete</button>
     </article>
   ));
   return (
