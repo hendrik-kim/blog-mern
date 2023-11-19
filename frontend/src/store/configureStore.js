@@ -1,34 +1,41 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import { persistStore, persistReducer, REGISTER, REHYDRATE, PERSIST } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import accountSlice from '../slices/accountSlice';
-import blogReducer from '../slices/blogSlice';
-import postsReducer from '../slices/postSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  persistStore,
+  persistReducer,
+  REGISTER,
+  REHYDRATE,
+  PERSIST,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import accountSlice from "../slices/accountSlice";
+import blogReducer from "../slices/blogSlice";
+import postsReducer from "../slices/postSlice";
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-}
+};
 
 // Combine reducers from different slices
 // Import other necessary slices
-const rootReducer = combineReducers({ 
+const rootReducer = combineReducers({
   account: accountSlice,
   blog: blogReducer,
   posts: postsReducer,
-})
+});
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Configure the Redux store
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: {
-      ignoreActions: [REGISTER, REHYDRATE, PERSIST],
-    },
-  }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoreActions: [REGISTER, REHYDRATE, PERSIST],
+      },
+    }),
 });
 
 // Custom hook to use with useDispatch

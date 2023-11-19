@@ -28,6 +28,9 @@
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "react-persist": "^1.0.2",
+    "redux-persist": "^6.0.0",
+    "uuid": "^9.0.1",
     "validator": "^13.11.0"
   },
   "devDependencies": {
