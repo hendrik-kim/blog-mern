@@ -13,8 +13,10 @@ function App() {
   );
 
   useEffect(() => {
-    dispatch(validateUserSession());
-  }, [dispatch]);
+    if (isAuthenticated) {
+      dispatch(validateUserSession());
+    }
+  }, [dispatch, isAuthenticated]);
 
   return (
     <Provider store={store}>
