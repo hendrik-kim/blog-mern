@@ -3,23 +3,21 @@ import { selectAllPosts } from "./../../slices/postSlice";
 
 function Home() {
   const posts = useSelector(selectAllPosts);
-  const publicPosts = posts.filter((post) => post.selectedOption === "public");
-  const renderedPosts = publicPosts.map((post) => (
-    <article key={post.id}>
-      {/* user name required */}
+  console.log("home :", posts);
+  const publicPosts = posts.filter((post) => post.postVisibility === "public");
+  const reversedPosts = [...publicPosts].reverse();
+  const renderedPosts = reversedPosts.map((post, i) => (
+    <article key={i}>
       <h3>{post.title}</h3>
-      <h4>{post.selectedOption}</h4>
-      <p>{post.content.substring(0, 100)}</p>
+      <h4>{post.postVisibility}</h4>
+      <p>{post.content}</p>
       <p>posting time: {post.timestamp}</p>
     </article>
   ));
   return (
     <div>
-      <section>
-        {/* display only public posting */}
-        <h2>Postings in home page</h2>
-        {renderedPosts}
-      </section>
+      <h2>Posting in HomePage</h2>
+      {renderedPosts}
     </div>
   );
 }

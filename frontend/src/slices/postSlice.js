@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 const simulateApiCall = (data) => {
   return new Promise((resolve) => {
@@ -16,23 +17,7 @@ export const addPostAsync = createAsyncThunk(
   }
 );
 
-const initialState = [
-  //example
-  {
-    status: "idle",
-    title: "First title",
-    content: "First content",
-    selectedOption: "public",
-    timestamp: "8:12:24PM",
-  },
-  {
-    status: "idle",
-    title: "Second title",
-    content: "Second content",
-    selectedOption: "public",
-    timestamp: "8:12:29PM",
-  },
-];
+const initialState = [];
 
 const postsSlice = createSlice({
   name: "posts",
@@ -42,18 +27,26 @@ const postsSlice = createSlice({
       reducer(state, action) {
         state.push(action.payload);
       },
-      prepare(title, content, selectedOption) {
+      prepare(title, content, postVisibility) {
         const timestamp = new Date().toLocaleTimeString();
         return {
           payload: {
+            postId: uuidv4(),
             status: "idle",
             title,
             content,
-            selectedOption,
+            postVisibility,
             timestamp,
           },
         };
       },
+    },
+    deletePosting: (state, action) => {
+      const { postId } = action.payload;
+      const findId = state.find((post) => post.postId === postId);
+      if (findId) {
+        return state.filter((f) => f.postId !== postId);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -82,5 +75,5 @@ const postsSlice = createSlice({
 
 export const selectAllPosts = (state) => state.posts;
 
-export const { postAdded } = postsSlice.actions;
+export const { postAdded, deletePosting } = postsSlice.actions;
 export default postsSlice.reducer;
