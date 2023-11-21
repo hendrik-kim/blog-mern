@@ -18,7 +18,6 @@ export const addPostAsync = createAsyncThunk(
 );
 
 const initialState = [];
-
 const postsSlice = createSlice({
   name: "posts",
   initialState,
@@ -40,6 +39,15 @@ const postsSlice = createSlice({
           },
         };
       },
+    },
+    postUpdated: (state, action) => {
+      const { postId, title, content, postVisibility } = action.payload;
+      const post = state.find((p) => p.postId === postId);
+      if (post) {
+        post.title = title;
+        post.content = content;
+        post.postVisibility = postVisibility;
+      }
     },
     deletePosting: (state, action) => {
       const { postId } = action.payload;
@@ -74,6 +82,5 @@ const postsSlice = createSlice({
 });
 
 export const selectAllPosts = (state) => state.posts;
-
-export const { postAdded, deletePosting } = postsSlice.actions;
+export const { postAdded, deletePosting, postUpdated } = postsSlice.actions;
 export default postsSlice.reducer;

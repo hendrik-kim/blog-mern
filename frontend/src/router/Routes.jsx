@@ -5,6 +5,7 @@ import AddPostForm from "../components/pages/AddPostForm";
 import Register from "../components/pages/Register";
 import Home from "../components/pages/Home";
 import Mypage from "../components/pages/Mypage";
+import EditPostForm from "../components/EditPostForm";
 // import BlogPostForm from '../example/BlogPostForm';
 
 const NoMatch = () => {
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
       { path: "my-page", element: <Mypage /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <Register /> },
+      { path: "edit-post/", element: <EditPostForm /> },
       { path: "*", element: <NoMatch /> },
     ],
   },
