@@ -48,6 +48,7 @@ const rootReducer = combineReducers({
   account: persistReducer(accountPersistConfig, accountReducer),
   blog: blogReducer,
   posts: postsReducer,
+  categories: categoryReducer
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
