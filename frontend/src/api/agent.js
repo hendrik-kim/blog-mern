@@ -28,33 +28,37 @@ const requests = {
 
 const agent = {
   Account: {
-    login: (values) => requests.post('/users/login', values),
-    signOut: () => requests.post('/users/signout'),
-    register: (values) => requests.post('/users/register', values),
+    login: (values) => requests.post("/users/login", values),
+    signOut: () => requests.post("/users/signout"),
+    register: (values) => requests.post("/users/register", values),
     googleLogin: () => {
       window.location.href = `${process.env.REACT_APP_API_URL}auth/google`;
     },
-    validateSession: () => requests.get('/auth/validate'),
+    validateSession: () => requests.get("/auth/validate"),
   },
   Blog: {
-    getPosts: () => requests.get('/posts'),
+    getPosts: () => requests.get("/posts"),
     getPostById: (id) => requests.get(`/posts/${id}`),
     deletePost: (id) => requests.delete(`/posts/${id}`),
-    createPost: (post) => requests.post('/posts', post),
+    createPost: (post) => requests.post("/posts", post),
     updatePost: (id, post) => requests.put(`/posts/${id}`, post),
-    postArticle: (article) => requests.post('/posts', article), // TODO: Exercise code to remove in the future
+    postArticle: (article) => requests.post("/posts", article), // TODO: Exercise code to remove in the future
   },
   Users: {
-    getAllUsers: () => requests.get('/users'),
+    getAllUsers: () => requests.get("/users"),
     getUserById: (id) => requests.get(`/users/${id}`),
   },
   Category: {
-    getCategories: () => requests.get('/categories'),
+    getCategories: () => requests.get("/categories"),
     getCategoryById: (id) => requests.get(`/categories/${id}`),
-    createCategory: (category) => requests.post('/categories', category),
+    createCategory: (category) => requests.post("/categories", category),
     updateCategory: (id, category) =>
-      requests.put(`/categories/${id}`, category),
-    deleteCategory: (id) => requests.delete(`/categories/${id}`),
+      requests.put(`/categories`, id, {
+        id: id,
+        name: category,
+        description: category,
+      }),
+    deleteCategory: (id) => requests.delete(`/categories/`, id),
   },
 };
 
