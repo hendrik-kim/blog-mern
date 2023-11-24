@@ -1,20 +1,64 @@
-import axios from 'axios';
+import axios from "axios";
+import { store } from "../store/configureStore";
+import { redirect } from "react-router-dom";
+import { setErrorMessage } from "../slices/commonSlice";
+import { signOutUser } from "../slices/accountSlice";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 const responseBody = (response) => response.data;
 
-axios.interceptors.request.use((config) => {
-  // TODO: Auth with tokens is coming
-  return config;
-});
+axios.interceptors.response
+  .use
+  // (response) => {
+  //   console.log('Response:', response);
+  //   return response;
+  // },
+  // (error) => {
+  //   console.log('Response Error:', error);
+  //   return Promise.reject(error);
+  // }
+  ();
 
 axios.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
+    const { data, status } = error.response || {};
+    const errorMessage = data?.message || "An unexpected error occurred"; // FIXME: When the server res data is undefined. Improvement required.
+    switch (status) {
+      case 400:
+        store.dispatch(setErrorMessage(errorMessage)); // FIXME: Needs to be modified to fit front-end team requirements.
+        break;
+      case 401:
+        store.dispatch(setErrorMessage(errorMessage));
+        store.dispatch(signOutUser());
+        redirect("/login");
+        break;
+      // FIXME: A common error component will need to be created and routed.
+      case 403:
+        store.dispatch(setErrorMessage(errorMessage));
+        redirect("/forbidden");
+        break;
+      case 404:
+        store.dispatch(setErrorMessage(errorMessage));
+        redirect("/not-found");
+        break;
+      case 500:
+        store.dispatch(setErrorMessage(errorMessage));
+        redirect("/server-error");
+      default:
+        store.dispatch(setErrorMessage(errorMessage));
+    }
+
+    if (!error.response) {
+      store.dispatch(
+        setErrorMessage("Network error or no response from server")
+      );
+    }
+
     return Promise.reject(error);
   }
 );

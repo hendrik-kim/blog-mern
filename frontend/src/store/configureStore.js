@@ -1,63 +1,72 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import { persistStore, persistReducer, createTransform, REGISTER, REHYDRATE, PERSIST } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import accountReducer from '../slices/accountSlice';
-import blogReducer from '../slices/blogSlice';
-import postsReducer from '../slices/postSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  persistStore,
+  persistReducer,
+  createTransform,
+  REGISTER,
+  REHYDRATE,
+  PERSIST,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import accountReducer from "../slices/accountSlice";
+import blogReducer from "../slices/blogSlice";
+import postsReducer from "../slices/postSlice";
+import commonReducer from "../slices/commonSlice";
+import categoryReducer from "../slices/categorySlice";
 
-//Transform to only persist the username from user object 
+//Transform to only persist the username from user object
 const whitelistTransform = createTransform(
   (inboundState, key) => {
-    if(key === 'user' && inboundState !== undefined && inboundState !== null) {
+    if (key === "user" && inboundState !== undefined && inboundState !== null) {
       return inboundState.username;
     }
     return inboundState;
   },
   (outBoundState, key) => {
-    if(key === 'user') {
+    if (key === "user") {
       return {
-        email: '',
+        email: "",
         isAdmin: null,
         isOAuthUser: null,
         username: outBoundState,
-        _id: '',
-      }
+        _id: "",
+      };
     }
     return outBoundState;
   }
 );
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  blacklist: ['account']
-}
+  blacklist: ["account"],
+};
 
 const accountPersistConfig = {
-  key: 'account',
-  storage, 
-  whitelist: ['isAuthenticated', 'user'],
-  transforms: [whitelistTransform]
-}
-
+  key: "account",
+  storage,
+  whitelist: ["isAuthenticated", "user"],
+  transforms: [whitelistTransform],
+};
 
 // Combine reducers from different slices
 // Import other necessary slices
-const rootReducer = combineReducers({ 
+const rootReducer = combineReducers({
   account: persistReducer(accountPersistConfig, accountReducer),
   blog: blogReducer,
+  common: commonReducer,
   posts: postsReducer,
-  categories: categoryReducer
+  categories: categoryReducer,
 });
 
-const persistedReducer = persistReducer(rootPersistConfig, rootReducer)
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 // Configure the Redux store
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ 
+    getDefaultMiddleware({
       serializableCheck: {
         ignoreActions: [REGISTER, REHYDRATE, PERSIST],
       },
