@@ -2,7 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import agent from '../api/agent';
 
 const initialState = {
-  user: null,
+  user: {
+    email: '',
+    isAdmin: null,
+    isOAuthUser: null,
+    username: '',
+    _id: '',
+  },
   isAuthenticated: false,
   loading: false,
   error: null,
@@ -90,7 +96,10 @@ const userSlice = createSlice({
       })
       .addCase(googleAuth.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isAuthenticated = true;
+      })
+      .addCase(googleAuth.rejected, (state, action) => {
+        state.user = null;
+        state.isAuthenticated = false;
       })
       .addCase(validateUserSession.pending, (state) => {
         state.loading = true;
@@ -103,6 +112,7 @@ const userSlice = createSlice({
       .addCase(validateUserSession.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+        state.isAuthenticated = false;
       })
       .addCase(signOutUser.fulfilled, (state, action) => {
         state.user = null;
