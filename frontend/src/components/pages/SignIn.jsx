@@ -6,6 +6,7 @@ import GoogleAuth from '../GoogleAuth';
 function SignIn() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((state) => state.account.user);
+  const isAuthenticated = useAppSelector((state) => state.account.isAuthenticated);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,11 +20,11 @@ function SignIn() {
 
   return (
     <div>
-      {userInfo ? (
-        <div>
-          <p>{`Welcome, ${userInfo.username}`}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
+      {isAuthenticated ? ( 
+         <div>
+            <p>{`Welcome, ${userInfo.username}`}</p>
+            <button onClick={handleLogout}>Logout</button>
+          </div> 
       ) : (
         <div>
           <input
