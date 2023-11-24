@@ -11,6 +11,7 @@ import storage from "redux-persist/lib/storage";
 import accountSlice from "../slices/accountSlice";
 import blogReducer from "../slices/blogSlice";
 import postsReducer from "../slices/postSlice";
+import categoryReducer from "../slices/categorySlice";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   account: accountSlice,
   blog: blogReducer,
   posts: postsReducer,
+  categories: categoryReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
