@@ -8,15 +8,10 @@ import { PersistGate } from "redux-persist/integration/react";
 
 function App() {
   const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector(
-    (state) => state.account.isAuthenticated
-  );
 
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(validateUserSession());
-    }
-  }, [dispatch, isAuthenticated]);
+    dispatch(validateUserSession());
+  }, [dispatch]);
 
   return (
     <Provider store={store}>

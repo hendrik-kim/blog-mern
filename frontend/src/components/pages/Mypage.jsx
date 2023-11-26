@@ -1,55 +1,49 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { selectAllPosts } from "./../../slices/postSlice";
-import { deletePosting } from "./../../slices/postSlice";
-import EditPostForm from "../EditPostForm";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/configureStore";
+import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
+import { store } from "../../store/configureStore";
+import { deletePost } from "../../slices/postSlice";
 
-const Mypage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
+function Mypage() {
+  const dispatch = useAppDispatch();
+  const posts = useAppSelector(selectAllPosts);
 
-  const [updateClickedPostId, setUpdateClickedPostId] = useState(null);
+  // Fetch posts when the component mounts
+  useEffect(() => {
+    dispatch(fetchAllPosts());
+    console.log("fetched posts!", store.getState().blog.posts);
+  }, [dispatch]);
 
-  const handleDelete = async (id) => {
-    console.log("Deleting post with id:", id);
-    try {
-      await dispatch(deletePosting({ postId: id }));
-    } catch (error) {
-      console.error("Error deleting post:", error);
-      setError("An error occurred while deleting the post.");
-    }
+  // Function to handle post deletion
+  const handleDelete = (postId) => {
+    console.log("post deleted! MyPage 1", postId);
+    // Dispatch the deletePost action with the post ID
+    dispatch(deletePost(postId));
   };
 
-  const handleUpdate = (postId) => {
-    // navigate(`/edit-post/${postId}`);
-  };
-
-  // category part should be displaying.
-  const posts = useSelector(selectAllPosts);
-  const reversedPosts = [...posts].reverse();
-  const renderedPosts = reversedPosts.map((post, i) => (
-    <article key={i}>
-      <h3>{post.postId}</h3>
-      <h3>{post.title}</h3>
-      <h4>{post.postVisibility}</h4>
-      <p>{post.content}</p>
-      <p>posting time: {post.timestamp}</p>
-      <button onClick={() => handleDelete(post.postId)}>Delete</button>
-      <button onClick={() => handleUpdate(post.postId)}>Update</button>
-      <EditPostForm postId={post.postId} />
-    </article>
-  ));
+  // Ensure that posts.posts is an array before reversing
+  const reversedPosts = Array.isArray(posts.posts)
+    ? [...posts.posts].reverse()
+    : [];
 
   return (
     <div>
-      <section>
-        <h2>Posting in My page</h2>
-        {renderedPosts}
-      </section>
+      <h2>Posting in mypage</h2>
+      {reversedPosts.length > 0 ? (
+        reversedPosts.map((post, i) => (
+          <article key={i}>
+            <h3>{post.title}</h3>
+            <h4>{post.postVisibility}</h4>
+            <p>{post.content}</p>
+            <p>posting time: {post.timestamp}</p>
+            <button onClick={() => handleDelete(post._id)}>Delete</button>
+          </article>
+        ))
+      ) : (
+        <p>No public posts available</p>
+      )}
     </div>
   );
-};
+}
 
 export default Mypage;

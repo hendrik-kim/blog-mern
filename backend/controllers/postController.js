@@ -1,5 +1,6 @@
-import asyncHandler from 'express-async-handler';
-import Post from '../models/postModel.js';
+import asyncHandler from "express-async-handler";
+import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
 
 /**
  * @route   GET /api/posts
@@ -21,7 +22,7 @@ const getPostById = asyncHandler(async (req, res) => {
   if (post) {
     res.json(post);
   } else {
-    res.status(404).json({ message: 'Post not found' });
+    res.status(404).json({ message: "Post not found" });
   }
 });
 
@@ -35,9 +36,9 @@ const deletePost = asyncHandler(async (req, res) => {
 
   if (post) {
     await post.deleteOne();
-    res.json({ message: 'Post removed' });
+    res.json({ message: "Post removed" });
   } else {
-    res.status(404).json({ message: 'Post not found' });
+    res.status(404).json({ message: "Post not found" });
   }
 });
 
@@ -47,25 +48,29 @@ const deletePost = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const createPost = asyncHandler(async (req, res) => {
-  // const { title, imageUrl, category, content, user } = req.body;
-  const { content } = req.body;
+  const { title, content, postVisibility, timestamp } = req.body;
+  //const { content } = req.body;
+  console.log(req.body);
 
-  if (!content || content.trim() === '') {
-    res.status(400).json({ message: 'Content cannot be empty' });
+  if (!content || content.trim() === "") {
+    res.status(400).json({ message: "Content cannot be empty" });
     return;
   }
 
-  // const post = new Post({
-  //   user,
-  //   title,
-  //   imageUrl,
-  //   category,
-  //   content,
-  // });
+  const user1 = await User.findOne({ email: "test@test.com" });
 
-  // const createdPost = await post.save();
-  // res.status(201).json(createdPost);
-  res.status(201).json({ message: 'Post created successfully', content });
+  const post = new Post({
+    user: user1,
+    title: title,
+    category: "test",
+    content: content,
+    postVisibility: postVisibility,
+    timestamp: timestamp,
+  });
+
+  const createdPost = await post.save();
+  //res.status(201).json(createdPost);
+  res.status(201).json({ message: "Post created successfully" });
 });
 
 /**
@@ -86,7 +91,7 @@ const updatePost = asyncHandler(async (req, res) => {
     const updatedPost = await post.save();
     res.json(updatedPost);
   } else {
-    res.status(404).json({ message: 'Post not found' });
+    res.status(404).json({ message: "Post not found" });
   }
 });
 
@@ -101,7 +106,7 @@ const addCommentToPost = asyncHandler(async (req, res) => {
   const post = await Post.findById(postId);
   if (!post) {
     res.status(404);
-    throw new Error('Post not found');
+    throw new Error("Post not found");
   }
 
   const comment = new Comment({

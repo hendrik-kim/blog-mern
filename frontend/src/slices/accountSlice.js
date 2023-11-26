@@ -1,17 +1,23 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import agent from '../api/agent';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import agent from "../api/agent";
 
 const initialState = {
-  user: null,
+  user: {
+    email: "",
+    isAdmin: null,
+    isOAuthUser: null,
+    username: "",
+    _id: "",
+  },
   isAuthenticated: false,
   loading: false,
   error: null,
   blogPost: null,
 };
 
-// Asynchronous thunk for signing up an user 
+// Asynchronous thunk for signing up an user
 export const signUpUser = createAsyncThunk(
-  'user/signUpUser',
+  "user/signUpUser",
   async (data, thunkAPI) => {
     try {
       const user = await agent.Account.register(data);
@@ -23,7 +29,7 @@ export const signUpUser = createAsyncThunk(
 );
 
 export const signInUser = createAsyncThunk(
-  'user/signInUser',
+  "user/signInUser",
   async (data, thunkAPI) => {
     try {
       const user = await agent.Account.login(data); // Attempt to login with provided data
@@ -35,7 +41,7 @@ export const signInUser = createAsyncThunk(
 );
 
 export const signOutUser = createAsyncThunk(
-  'user/signOutUser',
+  "user/signOutUser",
   async (data, thunkAPI) => {
     try {
       const response = await agent.Account.signOut();
@@ -47,7 +53,7 @@ export const signOutUser = createAsyncThunk(
 );
 
 export const googleAuth = createAsyncThunk(
-  'user/googleAuth', 
+  "user/googleAuth",
   async (_, thunkAPI) => {
     try {
       const response = await agent.Account.googleLogin();
@@ -56,10 +62,10 @@ export const googleAuth = createAsyncThunk(
       return thunkAPI.rejectWithValue(error);
     }
   }
-)
+);
 
 export const validateUserSession = createAsyncThunk(
-  'user/validateUserSession',
+  "user/validateUserSession",
   async (_, thunkAPI) => {
     try {
       const response = await agent.Account.validateSession();
@@ -71,7 +77,7 @@ export const validateUserSession = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUser: (state, action) => {
@@ -90,7 +96,10 @@ const userSlice = createSlice({
       })
       .addCase(googleAuth.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.isAuthenticated = true;
+      })
+      .addCase(googleAuth.rejected, (state, action) => {
+        state.user = null;
+        state.isAuthenticated = false;
       })
       .addCase(validateUserSession.pending, (state) => {
         state.loading = true;
@@ -103,6 +112,7 @@ const userSlice = createSlice({
       .addCase(validateUserSession.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+        state.isAuthenticated = false;
       })
       .addCase(signOutUser.fulfilled, (state, action) => {
         state.user = null;

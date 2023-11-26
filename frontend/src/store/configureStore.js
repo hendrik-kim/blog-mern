@@ -3,29 +3,64 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   persistStore,
   persistReducer,
+  createTransform,
   REGISTER,
   REHYDRATE,
   PERSIST,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import accountSlice from "../slices/accountSlice";
+import accountReducer from "../slices/accountSlice";
 import blogReducer from "../slices/blogSlice";
 import postsReducer from "../slices/postSlice";
+import commonReducer from "../slices/commonSlice";
+import categoryReducer from "../slices/categorySlice";
 
-const persistConfig = {
+//Transform to only persist the username from user object
+const whitelistTransform = createTransform(
+  (inboundState, key) => {
+    if (key === "user" && inboundState !== undefined && inboundState !== null) {
+      return inboundState.username;
+    }
+    return inboundState;
+  },
+  (outBoundState, key) => {
+    if (key === "user") {
+      return {
+        email: "",
+        isAdmin: null,
+        isOAuthUser: null,
+        username: outBoundState,
+        _id: "",
+      };
+    }
+    return outBoundState;
+  }
+);
+
+const rootPersistConfig = {
   key: "root",
   storage,
+  blacklist: ["account"],
+};
+
+const accountPersistConfig = {
+  key: "account",
+  storage,
+  whitelist: ["isAuthenticated", "user"],
+  transforms: [whitelistTransform],
 };
 
 // Combine reducers from different slices
 // Import other necessary slices
 const rootReducer = combineReducers({
-  account: accountSlice,
+  account: persistReducer(accountPersistConfig, accountReducer),
   blog: blogReducer,
+  common: commonReducer,
   posts: postsReducer,
+  categories: categoryReducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 // Configure the Redux store
 export const store = configureStore({

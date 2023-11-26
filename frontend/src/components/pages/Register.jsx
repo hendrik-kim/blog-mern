@@ -5,6 +5,7 @@ import { signOutUser, signUpUser } from '../../slices/accountSlice';
 function Register() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((state) => state.account.user);
+  const isAuthenticated = useAppSelector((state) => state.account.isAuthenticated);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,11 +27,11 @@ function Register() {
   return (
     <div>
       {/* if user successfully registered, show welcome message with logout button */}
-      {userInfo ? (
+      {isAuthenticated ? (
         <div>
-          <p>{`Welcome, ${userInfo.username}`}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
+            <p>{`Welcome, ${userInfo.username}`}</p>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
       ) : (
         <div
           style={{

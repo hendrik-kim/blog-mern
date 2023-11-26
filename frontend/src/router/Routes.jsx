@@ -5,8 +5,7 @@ import AddPostForm from "../components/pages/AddPostForm";
 import Register from "../components/pages/Register";
 import Home from "../components/pages/Home";
 import Mypage from "../components/pages/Mypage";
-import EditPostForm from "../components/EditPostForm";
-// import BlogPostForm from '../example/BlogPostForm';
+import CategoryList from "../components/pages/CategoryList";
 
 const NoMatch = () => {
   return <h1>This path hasn't been developed!</h1>;
@@ -25,11 +24,11 @@ export const router = createBrowserRouter([
       // { path: '/category', element: },
       // { path: 'blog-post', element: <BlogPostForm /> },
       { path: "/", element: <Home /> },
+      { path: "category", element: <CategoryList /> },
       { path: "new-post", element: <AddPostForm /> },
       { path: "my-page", element: <Mypage /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <Register /> },
-      { path: "edit-post/", element: <EditPostForm /> },
       { path: "*", element: <NoMatch /> },
     ],
   },

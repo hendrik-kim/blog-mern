@@ -1,27 +1,27 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
-import cors from 'cors';
-import path from 'path';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import connectDB from './config/database.js';
-import postRoutes from './routes/postRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import authRoutes from './routes/authRoutes.js';
-import categoryRoutes from './routes/categoryRoutes.js';
-import swaggerDocument from './utilities/swagger.js';
-import passportConfig from './config/passportConfig.js';
-import swaggerUi from 'swagger-ui-express';
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
-import passport from 'passport';
+import express from "express";
+import dotenv from "dotenv";
+import morgan from "morgan";
+import cors from "cors";
+import path from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./config/database.js";
+import postRoutes from "./routes/postRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import swaggerDocument from "./utilities/swagger.js";
+import passportConfig from "./config/passportConfig.js";
+import swaggerUi from "swagger-ui-express";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
 
 dotenv.config();
 const envFile =
-  process.env.NODE_ENV === 'production'
-    ? '.env.production'
-    : '.env.development';
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 dotenv.config({ path: envFile });
 
 connectDB();
@@ -33,7 +33,7 @@ const app = express();
 
 app.use(
   session({
-    secret: 'temp_session_key', // FIXME: Need to generate and use the proper session key later.
+    secret: "temp_session_key", // FIXME: Need to generate and use the proper session key later.
     resave: false,
     saveUninitialized: false,
   })
@@ -47,6 +47,8 @@ passportConfig();
 app.use(
   cors({
     origin: process.env.APP_CLIENT_URL,
+    // origin: "*",
+    optionSuccessStatus: 200,
     credentials: true,
   })
 );
@@ -54,27 +56,27 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/auth", authRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 }
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/public/')));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/public/")));
 
-  app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'));
+  app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
 } else {
-  app.get('/', (req, res) => {
-    res.send('API Server is running...');
+  app.get("/", (req, res) => {
+    res.send("API Server is running...");
   });
 }
 
 app.listen(
-  process.env.PORT || 5000,
+  process.env.PORT || 5001,
   console.log(`API Server running in ${process.env.NODE_ENV} mode`.green.bold)
 );
