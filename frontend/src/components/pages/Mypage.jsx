@@ -8,20 +8,21 @@ function Mypage() {
   const dispatch = useAppDispatch();
   const posts = useAppSelector(selectAllPosts);
 
-  // Fetch posts when the component mounts
   useEffect(() => {
     dispatch(fetchAllPosts());
     console.log("fetched posts!", store.getState().blog.posts);
   }, [dispatch]);
 
-  // Function to handle post deletion
   const handleDelete = (postId) => {
     console.log("post deleted! MyPage 1", postId);
-    // Dispatch the deletePost action with the post ID
     dispatch(deletePost(postId));
   };
 
-  // Ensure that posts.posts is an array before reversing
+  const handleUpdate = (postId) => {
+    console.log("post deleted! MyPage 1", postId);
+    dispatch(deletePost(postId));
+  };
+
   const reversedPosts = Array.isArray(posts.posts)
     ? [...posts.posts].reverse()
     : [];

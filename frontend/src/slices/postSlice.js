@@ -1,20 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import agent from "../api/agent";
 
-// get post
-export const getPost = createAsyncThunk(
-  "posts/getPost",
-  async (data, thunkAPI) => {
-    try {
-      const getPost = await agent.Blog.getPosts();
-      console.log(getPost);
-      return getPost;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
-
 export const fetchAllPosts = createAsyncThunk(
   "posts/fetchAllPosts",
   async (data, thunkAPI) => {
@@ -47,7 +33,7 @@ export const editPost = createAsyncThunk(
   "posts/editPost",
   async (data, thunkAPI) => {
     try {
-      const postEdit = await agent.Blog.updatePost(data);
+      const postEdit = await agent.Blog.updatePost();
       return postEdit;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -87,12 +73,6 @@ const postsSlice = createSlice({
         // request start
       })
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
-        state.posts = action.payload;
-      })
-      .addCase(getPost.pending, (state, action) => {
-        // request start
-      })
-      .addCase(getPost.fulfilled, (state, action) => {
         state.posts = action.payload;
       })
       .addCase(addPost.fulfilled, (state, action) => {
