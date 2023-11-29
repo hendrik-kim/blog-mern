@@ -49,8 +49,6 @@ const deletePost = asyncHandler(async (req, res) => {
  */
 const createPost = asyncHandler(async (req, res) => {
   const { title, content, postVisibility, timestamp } = req.body;
-  //const { content } = req.body;
-  console.log(req.body);
 
   if (!content || content.trim() === "") {
     res.status(400).json({ message: "Content cannot be empty" });
