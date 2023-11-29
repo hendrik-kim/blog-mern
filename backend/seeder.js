@@ -22,16 +22,16 @@ const createUsers = async () => {
     }).save()
   );
 
-  // for (let i = 0; i < 10; i++) {
-  //   userPromises.push(
-  //     new User({
-  //       username: faker.internet.userName(),
-  //       email: faker.internet.email(),
-  //       password: "password",
-  //       isAdmin: false,
-  //     }).save()
-  //   );
-  // }
+   for (let i = 0; i < 10; i++) {
+    userPromises.push(
+       new User({
+         username: faker.internet.userName(),
+         email: faker.internet.email(),
+         password: "password",
+         isAdmin: false,
+       }).save()
+   );
+ }
 
   const users = await Promise.all(userPromises);
   return users;
