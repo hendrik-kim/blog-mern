@@ -77,6 +77,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(
-  process.env.PORT || 5001,
+  process.env.PORT || 5000,
   console.log(`API Server running in ${process.env.NODE_ENV} mode`.green.bold)
 );
