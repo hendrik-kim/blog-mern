@@ -3,11 +3,11 @@ import agent from "../api/agent";
 
 const initialState = {
   user: {
-    email: "",
+    email: '',
     isAdmin: null,
     isOAuthUser: null,
-    username: "",
-    _id: "",
+    username: '',
+    _id: '',
   },
   isAuthenticated: false,
   loading: false,
