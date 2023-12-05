@@ -86,6 +86,11 @@ const postsSlice = createSlice({
       })
       .addCase(fetchAllPosts.pending, (state, action) => {
         // request start
+        return (state = {
+          ...state,
+          status: "idle",
+          foodLogs: action.payload,
+        });
       })
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
         state.posts = action.payload;

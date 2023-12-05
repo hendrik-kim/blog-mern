@@ -102,12 +102,12 @@ const agent = {
     getCategoryById: (id) => requests.get(`/categories/${id}`),
     createCategory: (category) => requests.post("/categories", category),
     updateCategory: (id, category) =>
-      requests.put(`/categories`, id, {
+      requests.put(`/categories/${id}`, {
         id: id,
         name: category,
         description: category,
       }),
-    deleteCategory: (id) => requests.delete(`/categories/`, id),
+    deleteCategory: (id) => requests.delete(`/categories/${id}`),
   },
 };
 
