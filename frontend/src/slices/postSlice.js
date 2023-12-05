@@ -1,79 +1,92 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
+import agent from "../api/agent";
 
-const simulateApiCall = (data) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(data);
-    }, 1000);
-  });
-};
-
-export const addPostAsync = createAsyncThunk(
-  "posts/addPostAsync",
-  async (post, { dispatch }) => {
-    const response = await simulateApiCall(post);
-    dispatch(postAdded(response));
+export const fetchAllPosts = createAsyncThunk(
+  "posts/fetchAllPosts",
+  async (data, thunkAPI) => {
+    try {
+      const response = await agent.Blog.getPosts();
+      console.log("fetch", response);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 
-const initialState = [];
+// post add
+export const addPost = createAsyncThunk(
+  "posts/addPost",
+  async (data, thunkAPI) => {
+    try {
+      console.log("action", data);
+      const postAdd = await agent.Blog.createPost(data);
+      return postAdd;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// post edit
+export const editPost = createAsyncThunk(
+  "posts/editPost",
+  async (data, thunkAPI) => {
+    try {
+      const postEdit = await agent.Blog.updatePost();
+      return postEdit;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+// post delete
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (data, thunkAPI) => {
+    try {
+      console.log("post deleted in slice", data);
+      const postDelete = await agent.Blog.deletePost(data);
+      return postDelete;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+const initialState = {
+  posts: [],
+};
 
 const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
-    postAdded: {
-      reducer(state, action) {
-        state.push(action.payload);
-      },
-      prepare(title, content, postVisibility) {
-        const timestamp = new Date().toLocaleTimeString();
-        return {
-          payload: {
-            postId: uuidv4(),
-            status: "idle",
-            title,
-            content,
-            postVisibility,
-            timestamp,
-          },
-        };
-      },
-    },
-    deletePosting: (state, action) => {
-      const { postId } = action.payload;
-      const findId = state.find((post) => post.postId === postId);
-      if (findId) {
-        return state.filter((f) => f.postId !== postId);
-      }
+    setPost: (state, action) => {
+      state.posts = action.payload;
     },
   },
   extraReducers: (builder) => {
-    const updatePostStatus = (state, action, status) => {
-      const { title } = action.meta.arg;
-      const post = state.find((post) => post.title === title);
-
-      if (post) {
-        post.status = status;
-      }
-    };
-
     builder
-      .addCase(addPostAsync.pending, (state, action) => {
-        updatePostStatus(state, action, "Loading");
+      .addCase(fetchAllPosts.pending, (state, action) => {
+        // request start
       })
-      .addCase(addPostAsync.fulfilled, (state, action) => {
-        updatePostStatus(state, action, "Complete");
-        state.push(action.payload);
+      .addCase(fetchAllPosts.fulfilled, (state, action) => {
+        state.posts = action.payload;
       })
-      .addCase(addPostAsync.rejected, (state, action) => {
-        updatePostStatus(state, action, "Fail");
+      .addCase(addPost.fulfilled, (state, action) => {
+        state.posts = action.payload;
+      })
+      .addCase(editPost.fulfilled, (state, action) => {
+        state.posts = action.payload;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = action.payload;
       });
   },
 });
 
 export const selectAllPosts = (state) => state.posts;
-
-export const { postAdded, deletePosting } = postsSlice.actions;
+export const { setPost } = postsSlice.actions;
 export default postsSlice.reducer;

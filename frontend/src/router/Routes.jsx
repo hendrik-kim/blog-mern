@@ -6,7 +6,7 @@ import Register from "../components/pages/Register";
 import Home from "../components/pages/Home";
 import Mypage from "../components/pages/Mypage";
 import CategoryList from "../components/pages/CategoryList";
-// import BlogPostForm from '../example/BlogPostForm';
+
 
 const NoMatch = () => {
   return <h1>This path hasn't been developed!</h1>;

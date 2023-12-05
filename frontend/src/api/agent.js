@@ -5,7 +5,7 @@ import { setErrorMessage } from "../slices/commonSlice";
 import { signOutUser } from "../slices/accountSlice";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 const responseBody = (response) => response.data;
 
@@ -66,7 +66,7 @@ axios.interceptors.response.use(
 const requests = {
   get: (url, params) => axios.get(url, { params }).then(responseBody),
   post: (url, body) => axios.post(url, body).then(responseBody),
-  delete: (url, id) => axios.delete(`${url}/${id}`).then(responseBody),
+  delete: (id) => axios.delete(`${id}`).then(responseBody),
   put: (url, id, body) => axios.put(`${url}/${id}`, body).then(responseBody),
 };
 

@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import { faker } from '@faker-js/faker';
-import Post from './models/postModel.js';
-import connectDB from './config/database.js';
-import User from './models/userModel.js';
-import bcrypt from 'bcryptjs';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import { faker } from "@faker-js/faker";
+import Post from "./models/postModel.js";
+import connectDB from "./config/database.js";
+import User from "./models/userModel.js";
+import bcrypt from "bcryptjs";
 
-dotenv.config({ path: '../.env.development' });
+dotenv.config({ path: "../.env.development" });
 
 connectDB();
 
@@ -15,23 +15,23 @@ const createUsers = async () => {
 
   userPromises.push(
     new User({
-      username: 'adminUser',
-      email: 'test@test.com',
-      password: 'password',
+      username: "adminUser",
+      email: "test@test.com",
+      password: "password",
       isAdmin: true,
     }).save()
   );
 
-  for (let i = 0; i < 10; i++) {
+   for (let i = 0; i < 10; i++) {
     userPromises.push(
-      new User({
-        username: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: 'password',
-        isAdmin: false,
-      }).save()
-    );
-  }
+       new User({
+         username: faker.internet.userName(),
+         email: faker.internet.email(),
+         password: "password",
+         isAdmin: false,
+       }).save()
+   );
+ }
 
   const users = await Promise.all(userPromises);
   return users;
@@ -50,7 +50,7 @@ const createPosts = async (users) => {
     }));
 
     await Post.insertMany(samplePosts);
-    console.log('Data Imported!'.green.inverse);
+    console.log("Data Imported!".green.inverse);
   } catch (error) {
     console.error(`${error}`.red.inverse);
     throw error;
@@ -60,7 +60,7 @@ const createPosts = async (users) => {
 const main = async () => {
   try {
     const users = await createUsers();
-    await createPosts(users);
+    // await createPosts(users);
   } catch (error) {
     console.error(`${error}`.red.inverse);
   } finally {
@@ -72,7 +72,7 @@ const destroyData = async () => {
   try {
     await User.deleteMany();
     await Post.deleteMany();
-    console.log('Data Destroyed!'.red.inverse);
+    console.log("Data Destroyed!".red.inverse);
     process.exit();
   } catch (error) {
     console.error(`${error}`.red.inverse);
@@ -80,7 +80,7 @@ const destroyData = async () => {
   }
 };
 
-if (process.argv[2] === '-d') {
+if (process.argv[2] === "-d") {
   destroyData();
 } else {
   main();

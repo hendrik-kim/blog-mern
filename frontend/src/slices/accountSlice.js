@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import agent from '../api/agent';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import agent from "../api/agent";
 
 const initialState = {
   user: {
@@ -15,9 +15,9 @@ const initialState = {
   blogPost: null,
 };
 
-// Asynchronous thunk for signing up an user 
+// Asynchronous thunk for signing up an user
 export const signUpUser = createAsyncThunk(
-  'user/signUpUser',
+  "user/signUpUser",
   async (data, thunkAPI) => {
     try {
       const user = await agent.Account.register(data);
@@ -29,7 +29,7 @@ export const signUpUser = createAsyncThunk(
 );
 
 export const signInUser = createAsyncThunk(
-  'user/signInUser',
+  "user/signInUser",
   async (data, thunkAPI) => {
     try {
       const user = await agent.Account.login(data); // Attempt to login with provided data
@@ -41,7 +41,7 @@ export const signInUser = createAsyncThunk(
 );
 
 export const signOutUser = createAsyncThunk(
-  'user/signOutUser',
+  "user/signOutUser",
   async (data, thunkAPI) => {
     try {
       const response = await agent.Account.signOut();
@@ -53,7 +53,7 @@ export const signOutUser = createAsyncThunk(
 );
 
 export const googleAuth = createAsyncThunk(
-  'user/googleAuth', 
+  "user/googleAuth",
   async (_, thunkAPI) => {
     try {
       const response = await agent.Account.googleLogin();
@@ -62,10 +62,10 @@ export const googleAuth = createAsyncThunk(
       return thunkAPI.rejectWithValue(error);
     }
   }
-)
+);
 
 export const validateUserSession = createAsyncThunk(
-  'user/validateUserSession',
+  "user/validateUserSession",
   async (_, thunkAPI) => {
     try {
       const response = await agent.Account.validateSession();
@@ -77,7 +77,7 @@ export const validateUserSession = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUser: (state, action) => {

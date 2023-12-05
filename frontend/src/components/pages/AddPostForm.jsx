@@ -1,89 +1,83 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { postAdded } from "../../slices/postSlice";
-import { v4 as uuidv4 } from "uuid";
+import { useAppDispatch } from "../../store/configureStore";
+import { addPost as addPostAction } from "../../slices/postSlice.js";
 
 const AddPostForm = () => {
-  // category section required
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [postId, setPostId] = useState("");
   const [postVisibility, setPostVisibility] = useState("public");
-  const [error, setError] = useState("");
-  const onTitleChanged = (e) => setTitle(e.target.value);
-  const onContentChanged = (e) => setContent(e.target.value);
 
   const handleVisibilityChange = (e) => {
     setPostVisibility(e.target.value);
   };
 
-  const onSavePostClicked = async () => {
-    try {
-      if (title && content) {
-        setPostId(uuidv4());
-        dispatch(postAdded(title, content, postVisibility));
-        setTitle("");
-        setContent("");
-        setPostVisibility("public");
-      } else {
-        if (!title) {
-          alert("please enter the title");
-        } else if (!content) {
-          alert("please enter the content");
-        }
-      }
-    } catch (error) {
-      console.error("Error adding post:", error);
-      setError("An error occurred while adding the post.");
+  const onSavePostClicked = () => {
+    if (!title && content) {
+      alert("Fill up the title or content");
+    } else {
+      dispatch(
+        addPostAction({
+          title,
+          content,
+          postVisibility,
+          timestamp: new Date().toLocaleTimeString(),
+        })
+      );
+      setTitle("");
+      setContent("");
+      setPostVisibility("public");
     }
   };
+
   return (
     <div>
-      <section>
-        <h2>Add a new post</h2>
-        <form>
-          Posting Status
-          <label>
+      <div>
+        <section>
+          <h2>Add a new post</h2>
+          <form>
+            Posting Status
+            <label>
+              <input
+                type="radio"
+                name="posting-visibility-status"
+                value="public"
+                checked={postVisibility === "public"}
+                onChange={handleVisibilityChange}
+              />
+              Public
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="posting-visibility-status"
+                value="private"
+                checked={postVisibility === "private"}
+                onChange={handleVisibilityChange}
+              />
+              Private
+            </label>
+            <label htmlFor="postTitle">Title:</label>
             <input
-              type="radio"
-              name="posting-visibility-status"
-              value="public"
-              checked={postVisibility === "public"}
-              onChange={handleVisibilityChange}
+              type="text"
+              name="postTitle"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
-            Public
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="posting-visibility-status"
-              value="private"
-              checked={postVisibility === "private"}
-              onChange={handleVisibilityChange}
+            <br />
+            <label htmlFor="postTitle">Content:</label>
+            <textarea
+              type="text"
+              name="postContent"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             />
-            Private
-          </label>
-          <label htmlFor="postTitle">Title:</label>
-          <input
-            type="text"
-            name="postTitle"
-            value={title}
-            onChange={onTitleChanged}
-          />
-          <br />
-          <label htmlFor="postTitle">Content:</label>
-          <textarea
-            type="text"
-            name="postContent"
-            value={content}
-            onChange={onContentChanged}
-          />
-          <button type="button" onClick={onSavePostClicked}>
-            Save post
-          </button>
-        </form>
-      </section>
+            <button type="button" onClick={onSavePostClicked}>
+              Save post
+            </button>
+          </form>
+        </section>
+      </div>
     </div>
   );
 };
