@@ -67,7 +67,7 @@ const requests = {
   get: (url, params) => axios.get(url, { params }).then(responseBody),
   post: (url, body) => axios.post(url, body).then(responseBody),
   delete: (id) => axios.delete(`${id}`).then(responseBody),
-  put: (url, id, body) => axios.put(`${url}/${id}`, body).then(responseBody),
+  put: (url, body) => axios.put(url, body).then(responseBody),
 };
 
 const agent = {

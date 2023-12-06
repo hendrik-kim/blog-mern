@@ -14,7 +14,7 @@ function RootLayout() {
           <NavLink to="/sign-in">Sign In</NavLink>
           <NavLink to="/sign-up">Sign Up</NavLink>
           {/* temp */}
-          {/* <NavLink to="/edit-post">Edit post</NavLink> */}
+          <NavLink to="/edit-post">Edit post</NavLink>
         </nav>
       </header>
 

@@ -42,4 +42,4 @@ To run this project locally, follow these steps:
    npm run dev
    ```
 
-This will start both the frontend and backend services. Your frontend will be served at `http://localhost:3000` and your backend API can be accessed at `http://localhost:5001`.
+This will start both the frontend and backend services. Your frontend will be served at `http://localhost:3000` and your backend API can be accessed at `http://localhost:5000`.
