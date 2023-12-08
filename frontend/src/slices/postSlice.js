@@ -96,12 +96,9 @@ const postsSlice = createSlice({
       .addCase(editPost.fulfilled, (state, action) => {
         state.posts = action.payload;
       })
-      // action.payload._id (not disappeared) VS action.payload.id;(disappeared all)
       .addCase(deletePost.fulfilled, (state, action) => {
-        const deletedPostId = action.payload._id;
-        state.posts = state.posts.findIndex(
-          (post) => post._id !== deletedPostId
-        );
+        const deletedPostId = action.payload;
+        state.posts = state.posts.filter((post) => post._id !== deletedPostId);
       });
   },
 });

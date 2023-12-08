@@ -36,8 +36,10 @@ const deletePost = asyncHandler(async (req, res) => {
 
   if (post) {
     await post.deleteOne();
-    res.json({ message: "Post removed" });
+    const postId = post._id;
+    res.json(postId);
   } else {
+    console.log("postController ERROR ");
     res.status(404).json({ message: "Post not found" });
   }
 });
