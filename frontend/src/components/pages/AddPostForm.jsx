@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../../store/configureStore";
+import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { addPost as addPostAction } from "../../slices/postSlice.js";
 
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
+  const { user: userInfo } = useAppSelector((state) => state.account);
+
   const [post, setPost] = useState({
     title: "",
     content: "",
@@ -24,6 +26,7 @@ const AddPostForm = () => {
       dispatch(
         addPostAction({
           ...post,
+          userId: userInfo._id,
           timestamp: new Date().toLocaleTimeString(),
         })
       );

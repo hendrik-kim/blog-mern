@@ -50,17 +50,16 @@ const deletePost = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const createPost = asyncHandler(async (req, res) => {
-  const { title, content, postVisibility, timestamp } = req.body;
+  const { userId, title, content, postVisibility, timestamp } = req.body;
 
   if (!content || content.trim() === "") {
     res.status(400).json({ message: "Content cannot be empty" });
     return;
   }
 
-  const user1 = await User.findOne({ email: "test@test.com" });
-
+  const user = await User.findById(userId);
   const post = new Post({
-    user: user1,
+    user: user._id.toString(),
     title: title,
     category: "test",
     content: content,
@@ -69,8 +68,8 @@ const createPost = asyncHandler(async (req, res) => {
   });
 
   const createdPost = await post.save();
-  //res.status(201).json(createdPost);
-  res.status(201).json({ message: "Post created successfully" });
+  res.status(201).json(createdPost);
+  // res.status(201).json({ message: "Post created successfully" });
 });
 
 /**

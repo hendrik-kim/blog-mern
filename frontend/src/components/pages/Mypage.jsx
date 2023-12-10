@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 function Mypage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const posts = useAppSelector(selectAllPosts);
+  const { user: userInfo } = useAppSelector((state) => state.account);
+  const posts = useAppSelector((state) => selectAllPosts(state));
 
   useEffect(() => {
     dispatch(fetchAllPosts());
@@ -24,9 +25,12 @@ function Mypage() {
     dispatch(editPost(postId));
     navigate(`/edit-post/${postId}`);
   };
+  const userId = userInfo._id;
 
   const reversedPosts = Object.values(
-    Array.isArray(posts.posts) ? Object.values(posts.posts).reverse() : {}
+    (Array.isArray(posts.posts) &&
+      posts.posts.filter((post) => post.user === userId).reverse()) ||
+      {}
   );
 
   return (
