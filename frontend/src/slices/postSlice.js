@@ -1,6 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import agent from "../api/agent";
 
+export const getPostById = createAsyncThunk(
+  "posts/getPostById",
+  async (data, thunkAPI) => {
+    try {
+      const response = await agent.Blog.getPostById(data);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 export const fetchAllPosts = createAsyncThunk(
   "posts/fetchAllPosts",
   async (data, thunkAPI) => {
@@ -33,7 +44,8 @@ export const editPost = createAsyncThunk(
   "posts/editPost",
   async (data, thunkAPI) => {
     try {
-      const postEdit = await agent.Blog.updatePost();
+      const { postId, ...postDetails } = data;
+      const postEdit = await agent.Blog.updatePost(postId, postDetails);
       return postEdit;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -69,6 +81,9 @@ const postsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getPostById.fulfilled, (state, action) => {
+        state.posts = action.payload;
+      })
       .addCase(fetchAllPosts.pending, (state, action) => {
         // request start
       })
@@ -81,8 +96,12 @@ const postsSlice = createSlice({
       .addCase(editPost.fulfilled, (state, action) => {
         state.posts = action.payload;
       })
+      // action.payload._id (not disappeared) VS action.payload.id;(disappeared all)
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = action.payload;
+        const deletedPostId = action.payload._id;
+        state.posts = state.posts.findIndex(
+          (post) => post._id !== deletedPostId
+        );
       });
   },
 });

@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
 import { store } from "../../store/configureStore";
-import { deletePost } from "../../slices/postSlice";
+import { deletePost, editPost } from "../../slices/postSlice";
+import { useNavigate } from "react-router-dom";
 
 function Mypage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const posts = useAppSelector(selectAllPosts);
 
   useEffect(() => {
@@ -17,15 +19,15 @@ function Mypage() {
     console.log("post deleted! MyPage 1", postId);
     dispatch(deletePost(postId));
   };
-
   const handleUpdate = (postId) => {
-    console.log("post deleted! MyPage 1", postId);
-    dispatch(deletePost(postId));
+    console.log("post updated! MyPage", postId);
+    dispatch(editPost(postId));
+    navigate(`/edit-post/${postId}`);
   };
 
-  const reversedPosts = Array.isArray(posts.posts)
-    ? [...posts.posts].reverse()
-    : [];
+  const reversedPosts = Object.values(posts.posts)
+    ? Object.values(posts.posts).reverse()
+    : {};
 
   return (
     <div>
@@ -38,6 +40,7 @@ function Mypage() {
             <p>{post.content}</p>
             <p>posting time: {post.timestamp}</p>
             <button onClick={() => handleDelete(post._id)}>Delete</button>
+            <button onClick={() => handleUpdate(post._id)}>Update</button>
           </article>
         ))
       ) : (

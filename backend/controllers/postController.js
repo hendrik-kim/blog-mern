@@ -77,7 +77,7 @@ const createPost = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const updatePost = asyncHandler(async (req, res) => {
-  const { title, imageUrl, category, content } = req.body;
+  const { title, imageUrl, category, content, postVisibility } = req.body;
   const post = await Post.findById(req.params.id);
 
   if (post) {
@@ -85,6 +85,7 @@ const updatePost = asyncHandler(async (req, res) => {
     post.imageUrl = imageUrl || post.imageUrl;
     post.category = category || post.category;
     post.content = content || post.content;
+    post.postVisibility = postVisibility || post.postVisibility;
 
     const updatedPost = await post.save();
     res.json(updatedPost);
