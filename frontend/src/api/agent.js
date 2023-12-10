@@ -1,36 +1,36 @@
 import axios from "axios";
-import { store } from "../store/configureStore";
 import { redirect } from "react-router-dom";
+
+import { store } from "../store/configureStore";
 import { setErrorMessage } from "../slices/commonSlice";
+import { globalErrors } from "../utils/error";
 import { signOutUser } from "../slices/accountSlice";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 
 const responseBody = (response) => response.data;
 
-axios.interceptors.response
-  .use
-  // (response) => {
-  //   console.log('Response:', response);
-  //   return response;
-  // },
-  // (error) => {
-  //   console.log('Response Error:', error);
-  //   return Promise.reject(error);
-  // }
-  ();
+axios.interceptors.request.use(
+  function (config) {
+    // TODO: Modify the request config, add headers, if needed.
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 axios.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    const { data, status } = error.response || {};
-    const errorMessage = data?.message || "An unexpected error occurred"; // FIXME: When the server res data is undefined. Improvement required.
+    const { status } = error.response || {};
+    const errorMessage = globalErrors[status] || globalErrors.default; // FIXME: When the server res data is undefined. Improvement required.
     switch (status) {
       case 400:
-        store.dispatch(setErrorMessage(errorMessage)); // FIXME: Needs to be modified to fit front-end team requirements.
+        store.dispatch(setErrorMessage(errorMessage));
         break;
       case 401:
         store.dispatch(setErrorMessage(errorMessage));
@@ -46,9 +46,14 @@ axios.interceptors.response.use(
         store.dispatch(setErrorMessage(errorMessage));
         redirect("/not-found");
         break;
+      case 409:
+        store.dispatch(setErrorMessage(errorMessage));
+        redirect("/sign-up");
+        break;
       case 500:
         store.dispatch(setErrorMessage(errorMessage));
         redirect("/server-error");
+        break;
       default:
         store.dispatch(setErrorMessage(errorMessage));
     }
@@ -57,9 +62,9 @@ axios.interceptors.response.use(
       store.dispatch(
         setErrorMessage("Network error or no response from server")
       );
-    }
 
-    return Promise.reject(error);
+      return Promise.reject(error);
+    }
   }
 );
 

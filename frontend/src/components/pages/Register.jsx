@@ -1,72 +1,97 @@
-import React, { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../store/configureStore';
-import { signOutUser, signUpUser } from '../../slices/accountSlice';
+import { useAppSelector } from "../../store/configureStore";
+import {
+  selectUser,
+  selectIsAuthenticated,
+  signUpUser,
+} from "../../slices/accountSlice";
+import { useInput, useSignOut, useAuthSubmit } from "../../utils/customHooks";
+import GoogleAuth from "../GoogleAuth";
+import Input from "../Input";
 
 function Register() {
-  const dispatch = useAppDispatch();
-  const userInfo = useAppSelector((state) => state.account.user);
-  const isAuthenticated = useAppSelector((state) => state.account.isAuthenticated);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const userInfo = useAppSelector(selectUser);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
-  const handleRegister = () => {
-    //If passwords that user typed in are unmatched, display alert
-    if (password !== confirmPassword) {
-      alert('Password unmatched');
-    } else {
-      dispatch(signUpUser({ email, password, username }));
-    }
+  const initialUserValue = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+    username: "",
   };
-
-  const handleLogout = () => {
-    dispatch(signOutUser());
-  };
+  const formValues = useInput(initialUserValue);
+  const signOut = useSignOut();
+  const { errors, handleSubmit } = useAuthSubmit(signUpUser, formValues.values);
 
   return (
     <div>
       {/* if user successfully registered, show welcome message with logout button */}
       {isAuthenticated ? (
         <div>
-            <p>{`Welcome, ${userInfo.username}`}</p>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-      ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '30%',
-            gap: 10,
-          }}
-        >
-          <input
-            type='text'
-            placeholder='Email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type='password'
-            placeholder='Password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            type='password'
-            placeholder='Confirm Password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <input
-            type='text'
-            placeholder='User name'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button onClick={handleRegister}>Register</button>
+          <p>{`Welcome, ${userInfo.username}`}</p>
+          <button onClick={signOut}>Logout</button>
         </div>
+      ) : (
+        <>
+          <form onSubmit={handleSubmit}>
+            <h1>Sign Up</h1>
+            <div>
+              <Input
+                type="text"
+                name="email"
+                placeholder="Email"
+                extraValue={formValues}
+              />
+              <span>{errors.email}</span>
+            </div>
+            <div>
+              <Input
+                type="password"
+                name="password"
+                placeholder="Password"
+                extraValue={formValues}
+              />{" "}
+              <span>{errors.password}</span>
+              {errors.hasOwnProperty("password") ? (
+                <div>
+                  Password must meet the following criteria:
+                  <ul>
+                    <li>At least 8 characters</li>
+                    <li>At least one lower case letter</li>
+                    <li>At least one upper case letter</li>
+                    <li>At least one special character among '@$!%*?&'</li>
+                    <li>At least 8 characters</li>
+                  </ul>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div>
+              <Input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                extraValue={formValues}
+              />
+              <span>{errors.confirmPassword}</span>
+            </div>
+            <div>
+              <Input
+                type="text"
+                name="username"
+                placeholder="User name"
+                extraValue={formValues}
+              />
+              <span>{errors.username}</span>
+            </div>
+            <button type="submit">Register</button>
+          </form>
+          <p>
+            {errors.hasOwnProperty("invalid") ? errors.invalid : ""}
+          </p>
+          <p> Or </p>
+          <GoogleAuth />
+        </>
       )}
     </div>
   );
