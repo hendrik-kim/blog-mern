@@ -25,9 +25,9 @@ function Mypage() {
     navigate(`/edit-post/${postId}`);
   };
 
-  const reversedPosts = Object.values(posts.posts)
-    ? Object.values(posts.posts).reverse()
-    : {};
+  const reversedPosts = Object.values(
+    Array.isArray(posts.posts) ? Object.values(posts.posts).reverse() : {}
+  );
 
   return (
     <div>
