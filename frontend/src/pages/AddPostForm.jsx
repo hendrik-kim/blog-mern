@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../store/configureStore";
-import { addPost as addPostAction } from "../slices/postSlice.js";
+import { useAppDispatch, useAppSelector } from "../../store/configureStore";
+import { addPost as addPostAction } from "../../slices/postSlice.js";
+import { globalErrors } from "../../utils/error";
 
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
+  const { user: userInfo } = useAppSelector((state) => state.account);
   const [post, setPost] = useState({
     title: "",
     content: "",
@@ -16,6 +18,15 @@ const AddPostForm = () => {
       postVisibility: e.target.value,
     });
   };
+  const userId = userInfo ? userInfo._id : null;
+  if (userId === null) {
+    return (
+      <div>
+        <h2>Error in Write a post page</h2>
+        <p>{globalErrors[401]}</p>
+      </div>
+    );
+  }
 
   const onSavePostClicked = () => {
     if (!post.title && !post.content) {
@@ -24,6 +35,7 @@ const AddPostForm = () => {
       dispatch(
         addPostAction({
           ...post,
+          userId: userInfo._id,
           timestamp: new Date().toLocaleTimeString(),
         })
       );

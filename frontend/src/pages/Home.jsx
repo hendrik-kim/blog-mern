@@ -30,6 +30,7 @@ function Home() {
         reversedPosts.map((post, i) => (
           <article key={i}>
             <h3>{post.title}</h3>
+            <p>{post.user}</p>
             <h4>{post.postVisibility}</h4>
             <p>{post.content}</p>
             <p>posting time: {post.timestamp}</p>
