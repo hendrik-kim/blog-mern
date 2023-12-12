@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
-import { store } from "../../store/configureStore";
 import { deletePost, editPost } from "../../slices/postSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -13,20 +12,24 @@ function Mypage() {
 
   useEffect(() => {
     dispatch(fetchAllPosts());
-    console.log("fetched posts!", store.getState().blog.posts);
   }, [dispatch]);
 
   const handleDelete = (postId) => {
-    console.log("post deleted! MyPage 1", postId);
     dispatch(deletePost(postId));
   };
   const handleUpdate = (postId) => {
-    console.log("post updated! MyPage", postId);
     dispatch(editPost(postId));
     navigate(`/edit-post/${postId}`);
   };
-  const userId = userInfo._id;
-
+  const userId = userInfo ? userInfo._id : null;
+  if (userId === null) {
+    return (
+      <div>
+        <h2>Error in Mypage</h2>
+        <p>Please login first</p>
+      </div>
+    );
+  }
   const reversedPosts = Object.values(
     (Array.isArray(posts.posts) &&
       posts.posts.filter((post) => post.user === userId).reverse()) ||

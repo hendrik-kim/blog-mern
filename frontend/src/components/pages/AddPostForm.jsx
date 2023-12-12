@@ -18,7 +18,15 @@ const AddPostForm = () => {
       postVisibility: e.target.value,
     });
   };
-
+  const userId = userInfo ? userInfo._id : null;
+  if (userId === null) {
+    return (
+      <div>
+        <h2>Error in Write a post page</h2>
+        <p>Please login first</p>
+      </div>
+    );
+  }
   const onSavePostClicked = () => {
     if (!post.title && !post.content) {
       alert("Fill up the title or content");
