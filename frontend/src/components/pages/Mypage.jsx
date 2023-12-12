@@ -1,33 +1,42 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
-import { store } from "../../store/configureStore";
 import { deletePost, editPost } from "../../slices/postSlice";
 import { useNavigate } from "react-router-dom";
+import { globalErrors } from "../../utils/error";
 
 function Mypage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const posts = useAppSelector(selectAllPosts);
+  const { user: userInfo } = useAppSelector((state) => state.account);
+  const posts = useAppSelector((state) => selectAllPosts(state));
 
   useEffect(() => {
     dispatch(fetchAllPosts());
-    console.log("fetched posts!", store.getState().blog.posts);
   }, [dispatch]);
 
   const handleDelete = (postId) => {
-    console.log("post deleted! MyPage 1", postId);
     dispatch(deletePost(postId));
   };
   const handleUpdate = (postId) => {
-    console.log("post updated! MyPage", postId);
     dispatch(editPost(postId));
     navigate(`/edit-post/${postId}`);
   };
 
-  const reversedPosts = Object.values(posts.posts)
-    ? Object.values(posts.posts).reverse()
-    : {};
+  const userId = userInfo ? userInfo._id : null;
+  if (userId === null) {
+    return (
+      <div>
+        <h2>Error in Mypage</h2>
+        <p>{globalErrors[401]}</p>
+      </div>
+    );
+  }
+  const reversedPosts = Object.values(
+    (Array.isArray(posts.posts) &&
+      posts.posts.filter((post) => post.user === userId).reverse()) ||
+      {}
+  );
 
   return (
     <div>
