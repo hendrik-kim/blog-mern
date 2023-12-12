@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
-import { store } from "../../store/configureStore";
-import { deletePost, editPost } from "../../slices/postSlice";
 import { useNavigate } from "react-router-dom";
+
+import { store, useAppDispatch, useAppSelector } from "../store/configureStore";
+import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
+import { deletePost, editPost } from "../slices/postSlice";
 
 function Mypage() {
   const dispatch = useAppDispatch();

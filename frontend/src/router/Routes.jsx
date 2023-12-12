@@ -1,12 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import App from "../App";
-import SignIn from "../components/pages/SignIn";
-import AddPostForm from "../components/pages/AddPostForm";
-import Register from "../components/pages/Register";
-import Home from "../components/pages/Home";
-import Mypage from "../components/pages/Mypage";
-import CategoryList from "../components/pages/CategoryList";
-import EditPostForm from "../components/pages/EditPostForm";
+import SignIn from "../pages/SignIn";
+import AddPostForm from "../pages/AddPostForm";
+import Register from "../pages/Register";
+import Home from "../pages/Home";
+import Mypage from "../pages/Mypage";
+import CategoryList from "../pages/CategoryList";
+import EditPostForm from "../pages/EditPostForm";
 
 const NoMatch = () => {
   return <h1>This path hasn't been developed!</h1>;
