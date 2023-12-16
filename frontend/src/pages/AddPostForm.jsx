@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { addPost as addPostAction } from "../../slices/postSlice.js";
 import { validateUserSession, selectUser } from "../../slices/accountSlice.js";
 import { globalErrors } from "../../utils/error";
-
+//testing
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(selectUser);
