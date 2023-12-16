@@ -12,8 +12,6 @@ function Home() {
   useEffect(() => {
     dispatch(fetchAllPosts());
     console.log("fetched posts!", store.getState().blog.posts);
-
-    //Validate session for users who successfully authenticated and redirected from google log in page.
     dispatch(validateUserSession());
   }, [dispatch]);
 
@@ -29,10 +27,10 @@ function Home() {
       {reversedPosts.length > 0 ? (
         reversedPosts.map((post, i) => (
           <article key={i}>
-            <h3>{post.title}</h3>
-            <p>{post.user}</p>
-            <h4>{post.postVisibility}</h4>
-            <p>{post.content}</p>
+            <h3>title: {post.title}</h3>
+            <p>user id: {post.user}</p>
+            <h4>visibility: {post.postVisibility}</h4>
+            <p>content: {post.content}</p>
             <p>posting time: {post.timestamp}</p>
           </article>
         ))

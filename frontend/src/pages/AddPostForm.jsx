@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { addPost as addPostAction } from "../../slices/postSlice.js";
+import { validateUserSession, selectUser } from "../../slices/accountSlice.js";
 import { globalErrors } from "../../utils/error";
 
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
-  const { user: userInfo } = useAppSelector((state) => state.account);
+  const userInfo = useAppSelector(selectUser);
   const [post, setPost] = useState({
     title: "",
     content: "",
@@ -18,8 +19,11 @@ const AddPostForm = () => {
       postVisibility: e.target.value,
     });
   };
-  const userId = userInfo ? userInfo._id : null;
-  if (userId === null) {
+  useEffect(() => {
+    dispatch(validateUserSession());
+  }, [dispatch]);
+
+  if (!userInfo) {
     return (
       <div>
         <h2>Error in Write a post page</h2>
@@ -35,7 +39,7 @@ const AddPostForm = () => {
       dispatch(
         addPostAction({
           ...post,
-          userId: userInfo._id,
+          userId: userInfo?._id,
           timestamp: new Date().toLocaleTimeString(),
         })
       );
