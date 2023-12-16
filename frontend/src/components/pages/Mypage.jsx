@@ -4,15 +4,17 @@ import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
 import { deletePost, editPost } from "../../slices/postSlice";
 import { useNavigate } from "react-router-dom";
 import { globalErrors } from "../../utils/error";
+import { validateUserSession, selectUser } from "../../slices/accountSlice.js";
 
 function Mypage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user: userInfo } = useAppSelector((state) => state.account);
+  const userInfo = useAppSelector(selectUser);
   const posts = useAppSelector((state) => selectAllPosts(state));
 
   useEffect(() => {
     dispatch(fetchAllPosts());
+    dispatch(validateUserSession());
   }, [dispatch]);
 
   const handleDelete = (postId) => {
@@ -23,8 +25,7 @@ function Mypage() {
     navigate(`/edit-post/${postId}`);
   };
 
-  const userId = userInfo ? userInfo._id : null;
-  if (userId === null) {
+  if (!userInfo) {
     return (
       <div>
         <h2>Error in Mypage</h2>
@@ -34,7 +35,7 @@ function Mypage() {
   }
   const reversedPosts = Object.values(
     (Array.isArray(posts.posts) &&
-      posts.posts.filter((post) => post.user === userId).reverse()) ||
+      posts.posts.filter((post) => post.user === userInfo._id).reverse()) ||
       {}
   );
 
