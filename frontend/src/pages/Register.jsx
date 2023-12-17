@@ -1,26 +1,27 @@
-import { useAppSelector } from "../../store/configureStore";
+import { useAppSelector } from "../store/configureStore";
 import {
   selectUser,
   selectIsAuthenticated,
   signUpUser,
-} from "../../slices/accountSlice";
-import { useInput, useSignOut, useAuthSubmit } from "../../utils/customHooks";
-import GoogleAuth from "../GoogleAuth";
-import Input from "../Input";
+} from "../slices/accountSlice";
+import useAuthSubmit from "../hooks/useAuthSubmit";
+import useInput from "../hooks/useInput";
+import useSignOut from "../hooks/useSignOut";
+import GoogleAuth from "../components/GoogleAuth";
+import Input from "../components/Input";
 
 function Register() {
   const userInfo = useAppSelector(selectUser);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-
   const initialUserValue = {
     email: "",
     password: "",
     confirmPassword: "",
     username: "",
   };
-  const formValues = useInput(initialUserValue);
+  const { formValues, handleChange } = useInput(initialUserValue);
   const signOut = useSignOut();
-  const { errors, handleSubmit } = useAuthSubmit(signUpUser, formValues.values);
+  const { errors, handleSubmit } = useAuthSubmit(signUpUser, formValues);
 
   return (
     <div>
@@ -32,14 +33,15 @@ function Register() {
         </div>
       ) : (
         <>
+          <h1>Sign Up</h1>
           <form onSubmit={handleSubmit}>
-            <h1>Sign Up</h1>
             <div>
               <Input
                 type="text"
                 name="email"
                 placeholder="Email"
-                extraValue={formValues}
+                value={formValues.email}
+                onChange={handleChange}
               />
               <span>{errors.email}</span>
             </div>
@@ -48,9 +50,9 @@ function Register() {
                 type="password"
                 name="password"
                 placeholder="Password"
-                extraValue={formValues}
-              />{" "}
-              <span>{errors.password}</span>
+                value={formValues.password}
+                onChange={handleChange}
+              />
               {errors.hasOwnProperty("password") ? (
                 <div>
                   Password must meet the following criteria:
@@ -71,7 +73,8 @@ function Register() {
                 type="password"
                 name="confirmPassword"
                 placeholder="Confirm Password"
-                extraValue={formValues}
+                value={formValues.confirmPassword}
+                onChange={handleChange}
               />
               <span>{errors.confirmPassword}</span>
             </div>
@@ -80,15 +83,14 @@ function Register() {
                 type="text"
                 name="username"
                 placeholder="User name"
-                extraValue={formValues}
+                value={formValues.username}
+                onChange={handleChange}
               />
               <span>{errors.username}</span>
             </div>
             <button type="submit">Register</button>
           </form>
-          <p>
-            {errors.hasOwnProperty("invalid") ? errors.invalid : ""}
-          </p>
+          <p>{errors.hasOwnProperty("invalid") ? errors.invalid : ""}</p>
           <p> Or </p>
           <GoogleAuth />
         </>

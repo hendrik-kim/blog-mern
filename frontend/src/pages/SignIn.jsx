@@ -1,21 +1,22 @@
-import { useAppSelector } from "../../store/configureStore";
+import { useAppSelector } from "../store/configureStore";
 import {
   signInUser,
   selectUser,
   selectIsAuthenticated,
-} from "../../slices/accountSlice";
-import { useInput, useSignOut, useAuthSubmit } from "../../utils/customHooks";
-import GoogleAuth from "../GoogleAuth";
-import Input from "../Input";
+} from "../slices/accountSlice";
+import useAuthSubmit from "../hooks/useAuthSubmit";
+import useInput from "../hooks/useInput";
+import useSignOut from "../hooks/useSignOut";
+import GoogleAuth from "../components/GoogleAuth";
+import Input from "../components/Input";
 
 function SignIn() {
   const userInfo = useAppSelector(selectUser);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const initialUserValue = { email: "", password: "" };
-  const formValues = useInput(initialUserValue);
+  const { formValues, handleChange } = useInput(initialUserValue);
   const signOut = useSignOut();
-  const { errors, handleSubmit } = useAuthSubmit(signInUser, formValues.values);
-  const formErrors = errors;
+  const { errors, handleSubmit } = useAuthSubmit(signInUser, formValues);
 
   return (
     <div>
@@ -32,17 +33,19 @@ function SignIn() {
               type="text"
               name="email"
               placeholder="Email"
-              extraValue={formValues}
+              value={formValues.email}
+              onChange={handleChange}
             />
             <Input
               type="password"
               name="password"
               placeholder="Password"
-              extraValue={formValues}
+              value={formValues.password}
+              onChange={handleChange}
             />
             <button type="submit">Login</button>
           </form>
-          <p>{Object.values(formErrors)[0]}</p>
+          <p>{Object.values(errors)[0]}</p>
           <p> Or </p>
           <GoogleAuth />
         </>

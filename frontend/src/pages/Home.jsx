@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { fetchAllPosts, selectAllPosts } from "../../slices/postSlice";
-import { validateUserSession } from "../../slices/accountSlice";
-import { store } from "../../store/configureStore";
+
+import { store, useAppDispatch, useAppSelector } from "../store/configureStore";
+import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
+import { validateUserSession } from "../slices/accountSlice";
 
 function Home() {
   const dispatch = useAppDispatch();

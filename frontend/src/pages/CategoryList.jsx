@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   categoryListAsync,
   addCategoryAsync,
   removeCategoryAsync,
   updateCategoryAsync,
-} from "../../slices/categorySlice";
+} from "../slices/categorySlice";
 
 // Define a functional component name as Category
 const Category = () => {
-
   // Use Redux hooks to access the redux store, dispatch action and retrieve data
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
@@ -46,7 +46,7 @@ const Category = () => {
   const handleEditBtn = (categoryId, categoryName) => {
     setEditedCategory({ _id: categoryId, name: categoryName });
   };
-  
+
   return (
     <div>
       <h2>Categories</h2>

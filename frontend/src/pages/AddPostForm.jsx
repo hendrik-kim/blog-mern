@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../../store/configureStore";
-import { addPost as addPostAction } from "../../slices/postSlice.js";
+import { useAppDispatch } from "../store/configureStore";
+import { addPost as addPostAction } from "../slices/postSlice.js";
 
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
