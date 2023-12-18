@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { addPost as addPostAction } from "../../slices/postSlice.js";
-import { validateUserSession, selectUser } from "../../slices/accountSlice.js";
-import { globalErrors } from "../../utils/error";
+import { useAppDispatch, useAppSelector } from "../store/configureStore";
+import { addPost as addPostAction } from "../slices/postSlice";
+import { validateUserSession, selectUser } from "../slices/accountSlice";
+import { globalErrors } from "../utils/error";
 //testing
 const AddPostForm = () => {
   const dispatch = useAppDispatch();

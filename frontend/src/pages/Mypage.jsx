@@ -1,7 +1,7 @@
 import React from "react";
-import Posting from "../Posting";
-import { useAppSelector } from "../../store/configureStore";
-import { selectUser } from "../../slices/accountSlice";
+import Posting from "../components/Posting";
+import { useAppSelector } from "../store/configureStore";
+import { selectUser } from "../slices/accountSlice";
 
 function Mypage() {
   const userInfo = useAppSelector(selectUser);

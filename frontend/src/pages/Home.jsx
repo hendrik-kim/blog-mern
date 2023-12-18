@@ -1,5 +1,5 @@
 import React from "react";
-import Posting from "../Posting";
+import Posting from "../components/Posting";
 
 function Home() {
   return (

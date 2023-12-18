@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
-import { useAppDispatch, useAppSelector } from "../store/configureStore";
-import { editPost, getPostById, selectAllPosts } from "../slices/postSlice";
+import { useAppDispatch, useAppSelector } from "../../src/store/configureStore";
+import {
+  editPost,
+  getPostById,
+  selectAllPosts,
+} from "../../src/slices/postSlice";
 
 const EditPostForm = () => {
   const { postId } = useParams();

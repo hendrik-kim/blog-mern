@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../src/store/configureStore";
+import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
-import { validateUserSession, selectUser } from "../../src/slices/accountSlice";
+import { validateUserSession, selectUser } from "../slices/accountSlice";
 import { useNavigate } from "react-router-dom";
-import { deletePost, editPost } from "../../src/slices/postSlice";
+import { deletePost, editPost } from "../slices/postSlice";
 
 const Posting = ({ postVisibility, showButtons = false }) => {
   const dispatch = useAppDispatch();
