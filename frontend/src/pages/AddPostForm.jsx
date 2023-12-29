@@ -3,7 +3,8 @@ import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { addPost as addPostAction } from "../slices/postSlice";
 import { validateUserSession, selectUser } from "../slices/accountSlice";
 import { globalErrors } from "../utils/error";
-//testing
+import { Navigate } from "react-router-dom";
+
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(selectUser);
@@ -22,15 +23,15 @@ const AddPostForm = () => {
   useEffect(() => {
     dispatch(validateUserSession());
   }, [dispatch]);
-
-  if (!userInfo) {
-    return (
-      <div>
-        <h2>Error in Write a post page</h2>
-        <p>{globalErrors[401]}</p>
-      </div>
-    );
-  }
+  //TODO: Should we use this code? or redirect to sign in page?
+  // if (!userInfo) {
+  //   return (
+  //     <div>
+  //       <h2>Error in Write a post page</h2>
+  //       <p>{globalErrors[401]}</p>
+  //     </div>
+  //   );
+  // }
 
   const onSavePostClicked = () => {
     if (!post.title && !post.content) {
@@ -58,50 +59,54 @@ const AddPostForm = () => {
 
   return (
     <div>
-      <div>
-        <section>
-          <h2>Add a new post</h2>
-          <form onSubmit={handleSubmit}>
-            Posting Status
-            <label>
+      {userInfo ? (
+        <div>
+          <section>
+            <h2>Add a new post</h2>
+            <form onSubmit={handleSubmit}>
+              Posting Status
+              <label>
+                <input
+                  type="radio"
+                  name="posting-visibility-status"
+                  value="public"
+                  checked={post.postVisibility === "public"}
+                  onChange={handleVisibilityChange}
+                />
+                Public
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="posting-visibility-status"
+                  value="private"
+                  checked={post.postVisibility === "private"}
+                  onChange={handleVisibilityChange}
+                />
+                Private
+              </label>
+              <label htmlFor="postTitle">Title:</label>
               <input
-                type="radio"
-                name="posting-visibility-status"
-                value="public"
-                checked={post.postVisibility === "public"}
-                onChange={handleVisibilityChange}
+                type="text"
+                name="postTitle"
+                value={post.title}
+                onChange={(e) => setPost({ ...post, title: e.target.value })}
               />
-              Public
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="posting-visibility-status"
-                value="private"
-                checked={post.postVisibility === "private"}
-                onChange={handleVisibilityChange}
+              <br />
+              <label htmlFor="postTitle">Content:</label>
+              <textarea
+                type="text"
+                name="postContent"
+                value={post.content}
+                onChange={(e) => setPost({ ...post, content: e.target.value })}
               />
-              Private
-            </label>
-            <label htmlFor="postTitle">Title:</label>
-            <input
-              type="text"
-              name="postTitle"
-              value={post.title}
-              onChange={(e) => setPost({ ...post, title: e.target.value })}
-            />
-            <br />
-            <label htmlFor="postTitle">Content:</label>
-            <textarea
-              type="text"
-              name="postContent"
-              value={post.content}
-              onChange={(e) => setPost({ ...post, content: e.target.value })}
-            />
-            <button type="submit">Save post</button>
-          </form>
-        </section>
-      </div>
+              <button type="submit">Save post</button>
+            </form>
+          </section>
+        </div>
+      ) : (
+        <Navigate to="/sign-in" />
+      )}
     </div>
   );
 };

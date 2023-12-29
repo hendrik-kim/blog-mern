@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
 import { validateUserSession, selectUser } from "../slices/accountSlice";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { deletePost, getPostById } from "../slices/postSlice";
 
 const Posting = ({ postVisibility, showButtons = false }) => {
@@ -31,24 +32,26 @@ const Posting = ({ postVisibility, showButtons = false }) => {
     dispatch(getPostById(postId));
     navigate(`/edit-post/${postId}`);
   };
+  const handleRedirect = (postId) => {
+    navigate(`/post-detail/${postId}`);
+  };
 
   return (
     <div>
       {filteredPosts.length > 0 ? (
         filteredPosts.map((post, i) => (
           <article key={i}>
-            <h3>title: {post.title}</h3>
-            {/* TODO: change userid to username once duplicate check is done */}
-            <p>user id: {post.user}</p>
-            <h4>visibility: {post.postVisibility}</h4>
-            <p>content: {post.content}</p>
-            <p>posting time: {post.timestamp}</p>
-            {showButtons && (
-              <>
-                <button onClick={() => handleDelete(post._id)}>Delete</button>
-                <button onClick={() => handleUpdate(post._id)}>Update</button>
-              </>
-            )}
+            <div onClick={() => handleRedirect(post._id)}>
+              <h3>title: {post.title}</h3>
+              {/* TODO: change userid to username once duplicate check is done */}
+              <p>user id: {post.user}</p>
+              {showButtons && (
+                <>
+                  <button onClick={() => handleDelete(post._id)}>Delete</button>
+                  <button onClick={() => handleUpdate(post._id)}>Update</button>
+                </>
+              )}
+            </div>
           </article>
         ))
       ) : (
