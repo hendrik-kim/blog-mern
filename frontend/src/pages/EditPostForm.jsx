@@ -12,13 +12,14 @@ const EditPostForm = () => {
   const dispatch = useAppDispatch();
   const [error, setError] = useState("");
   const postData = useAppSelector(selectAllPosts);
-
+  const [editedPostVisibility, setEditedPostVisibility] = useState("public");
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedContent, setEditedContent] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
         const action = await dispatch(getPostById(postId));
         const fetchedPost = action.payload;
-
         setEditedTitle(fetchedPost.title);
         setEditedContent(fetchedPost.content);
         setEditedPostVisibility(fetchedPost.postVisibility);
@@ -32,18 +33,6 @@ const EditPostForm = () => {
 
     fetchData();
   }, [dispatch, postId]);
-
-  const [editedTitle, setEditedTitle] = useState("");
-  const [editedContent, setEditedContent] = useState("");
-  const [editedPostVisibility, setEditedPostVisibility] = useState("public");
-
-  useEffect(() => {
-    if (postData) {
-      setEditedTitle(postData.title);
-      setEditedContent(postData.content);
-      setEditedPostVisibility(postData.postVisibility);
-    }
-  }, [postData]);
 
   const onContentChanged = (e) => setEditedContent(e.target.value);
   const onTitleChanged = (e) => setEditedTitle(e.target.value);
@@ -63,9 +52,9 @@ const EditPostForm = () => {
         setEditedContent("");
         setEditedTitle("");
         setEditedPostVisibility("public");
+        alert("Post edited successfully!");
       }
     } catch (error) {
-      console.error("Error editing post:", error);
       setError("An error occurred while editing the post.");
     }
   };

@@ -3,7 +3,7 @@ import agent from "../api/agent";
 
 export const getPostById = createAsyncThunk(
   "posts/getPostById",
-  async (data, thunkAPI) => {
+  async (data) => {
     try {
       const response = await agent.Blog.getPostById(data);
       return response;
@@ -14,10 +14,9 @@ export const getPostById = createAsyncThunk(
 );
 export const fetchAllPosts = createAsyncThunk(
   "posts/fetchAllPosts",
-  async (data, thunkAPI) => {
+  async () => {
     try {
       const response = await agent.Blog.getPosts();
-      console.log("fetch", response);
       return response;
     } catch (err) {
       console.log(err);
@@ -30,7 +29,6 @@ export const addPost = createAsyncThunk(
   "posts/addPost",
   async (data, thunkAPI) => {
     try {
-      console.log("action", data);
       const postAdd = await agent.Blog.createPost(data);
       return postAdd;
     } catch (error) {
@@ -58,7 +56,6 @@ export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (data, thunkAPI) => {
     try {
-      console.log("post deleted in slice", data);
       const postDelete = await agent.Blog.deletePost(data);
       return postDelete;
     } catch (error) {
