@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       // { path: '/search', element:  },
-      // { path: '/category', element: },
+      // { path: '/category', element: <CategoryList /> },
       // { path: 'blog-post', element: <BlogPostForm /> },
       { path: "/", element: <Home /> },
       { path: "category", element: <CategoryList /> },
