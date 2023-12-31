@@ -45,13 +45,13 @@ const Posting = ({ postVisibility, showButtons = false }) => {
               <h3>title: {post.title}</h3>
               {/* TODO: change userid to username once duplicate check is done */}
               <p>user id: {post.user}</p>
-              {showButtons && (
-                <>
-                  <button onClick={() => handleDelete(post._id)}>Delete</button>
-                  <button onClick={() => handleUpdate(post._id)}>Update</button>
-                </>
-              )}
             </div>
+            {showButtons && (
+              <>
+                <button onClick={() => handleDelete(post._id)}>Delete</button>
+                <button onClick={() => handleUpdate(post._id)}>Update</button>
+              </>
+            )}
           </article>
         ))
       ) : (

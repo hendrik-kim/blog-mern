@@ -22,7 +22,7 @@ const PostDetail = () => {
   return (
     <div>
       <h1>Posting Detail</h1>
-      <h2>Title: {post.title}</h2>
+      {/* <h2>Title: {post.title}</h2> */}
       <p>User ID: {post.user}</p>
       <h4>Visibility: {post.postVisibility}</h4>
       <p>Content: {post.content}</p>

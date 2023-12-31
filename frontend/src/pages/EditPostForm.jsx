@@ -61,6 +61,7 @@ const EditPostForm = () => {
       }
     } catch (error) {
       console.error("Error editing post:", error);
+      alert(globalErrors[400]);
     }
   };
 
@@ -72,13 +73,6 @@ const EditPostForm = () => {
     <div>
       <section>
         <h2>Edit the post</h2>
-        {globalErrors[400] && (
-          <div>
-            <h2>Error in Write a post page</h2>
-            <p>{globalErrors[400]}</p>
-          </div>
-        )}
-        s
         <form>
           Posting Status
           <label>
