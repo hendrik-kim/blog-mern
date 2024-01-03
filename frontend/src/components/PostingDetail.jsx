@@ -1,32 +1,34 @@
 // PostDetail.jsx
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
-import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
 import { useParams } from "react-router-dom";
 import { validateUserSession } from "../slices/accountSlice";
+import { getPostById, selectAllPosts } from "../slices/postSlice";
 
 const PostDetail = () => {
   const dispatch = useAppDispatch();
-  const { postId } = useParams();
   const posts = useAppSelector(selectAllPosts);
+  const { postId } = useParams();
+
+  useEffect(() => {
+    dispatch(validateUserSession());
+    dispatch(getPostById(postId));
+  }, [dispatch]);
+
   const filteredPosts = Array.isArray(posts.posts)
     ? posts.posts.filter((post) => post._id === postId)
     : [];
-
-  useEffect(() => {
-    dispatch(fetchAllPosts());
-    dispatch(validateUserSession());
-  }, [dispatch]);
-
-  const post = filteredPosts[0];
   return (
     <div>
-      <h1>Posting Detail</h1>
-      {/* <h2>Title: {post.title}</h2> */}
-      <p>User ID: {post.user}</p>
-      <h4>Visibility: {post.postVisibility}</h4>
-      <p>Content: {post.content}</p>
-      <p>Posting Time: {post.timestamp}</p>
+      {filteredPosts.map((post, i) => (
+        <article key={i}>
+          <h1>Title: {post.title}</h1>
+          <p>User id: {post.user}</p>
+          <p>Content: {post.content}</p>
+          <p>Post Visibility: {post.postVisibility}</p>
+          <p>Time Stamp: {post.timestamp}</p>
+        </article>
+      ))}
     </div>
   );
 };

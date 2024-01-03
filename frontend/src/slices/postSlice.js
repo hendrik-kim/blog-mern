@@ -79,7 +79,10 @@ const postsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getPostById.fulfilled, (state, action) => {
-        state.posts = action.payload;
+        return {
+          ...state,
+          data: action.payload,
+        };
       })
       .addCase(fetchAllPosts.pending, (state, action) => {
         // request start

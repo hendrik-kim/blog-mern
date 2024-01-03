@@ -3,8 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
 import { validateUserSession, selectUser } from "../slices/accountSlice";
 import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-import { deletePost, getPostById } from "../slices/postSlice";
+import { deletePost } from "../slices/postSlice";
 
 const Posting = ({ postVisibility, showButtons = false }) => {
   const dispatch = useAppDispatch();
@@ -29,7 +28,6 @@ const Posting = ({ postVisibility, showButtons = false }) => {
     alert("Post deleted!");
   };
   const handleUpdate = (postId) => {
-    dispatch(getPostById(postId));
     navigate(`/edit-post/${postId}`);
   };
   const handleRedirect = (postId) => {

@@ -61,7 +61,7 @@ const EditPostForm = () => {
       }
     } catch (error) {
       console.error("Error editing post:", error);
-      alert(globalErrors[400]);
+      alert(globalErrors[404]);
     }
   };
 
