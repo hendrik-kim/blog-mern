@@ -1,27 +1,13 @@
-import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../store/configureStore";
-import { fetchAllPosts, selectAllPosts } from "../slices/postSlice";
-import { validateUserSession, selectUser } from "../slices/accountSlice";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../store/configureStore";
 import { deletePost, getPostById } from "../slices/postSlice";
+import usePosts from "../hooks/usePosts";
 
 const Posting = ({ postVisibility, showButtons = false }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const posts = useAppSelector(selectAllPosts);
-  const userInfo = useAppSelector(selectUser);
-
-  useEffect(() => {
-    dispatch(fetchAllPosts());
-    dispatch(validateUserSession());
-  }, [dispatch]);
-
-  const filteredPosts = Array.isArray(posts.posts)
-    ? (postVisibility === "public"
-        ? posts.posts.filter((post) => post.postVisibility === "public")
-        : posts.posts.filter((post) => post.user === userInfo?._id)
-      ).reverse()
-    : [];
+  const { publicPosting } = usePosts(postVisibility);
 
   const handleDelete = (postId) => {
     dispatch(deletePost(postId));
@@ -34,8 +20,8 @@ const Posting = ({ postVisibility, showButtons = false }) => {
 
   return (
     <div>
-      {filteredPosts.length > 0 ? (
-        filteredPosts.map((post, i) => (
+      {publicPosting.length > 0 ? (
+        publicPosting.map((post, i) => (
           <article key={i}>
             <h3>title: {post.title}</h3>
             {/* TODO: change userid to username once duplicate check is done */}
