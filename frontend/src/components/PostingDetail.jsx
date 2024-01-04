@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { useParams } from "react-router-dom";
 import { validateUserSession } from "../slices/accountSlice";
 import { getPostById, selectAllPosts } from "../slices/postSlice";
-
+import { useNavigate } from "react-router-dom";
 const PostDetail = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const posts = useAppSelector(selectAllPosts);
   const { postId } = useParams();
@@ -29,6 +30,7 @@ const PostDetail = () => {
           <p>Time Stamp: {post.timestamp}</p>
         </article>
       ))}
+      <button onClick={() => navigate(-1)}>go back</button>
     </div>
   );
 };
