@@ -78,7 +78,7 @@ const categorySlice = createSlice({
       // Add case for successful removal of a category
       .addCase(removeCategoryAsync.fulfilled, (state, action) => {
         // Remove the deleted category from the state
-        const deletedCategoryId = action.payload;
+        const deletedCategoryId = action.payload._id;
         state.categories = state.categories.filter(
           (category) => category._id !== deletedCategoryId
         );
@@ -90,7 +90,6 @@ const categorySlice = createSlice({
         const existingCategory = state.categories.find(
           (category) => category._id === _id
         );
-
         if (existingCategory) {
           existingCategory.name = name;
         }
