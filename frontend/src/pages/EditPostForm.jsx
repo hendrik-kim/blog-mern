@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../src/store/configureStore";
+import { globalErrors } from "../utils/error";
+
 import {
   editPost,
   getPostById,
@@ -10,7 +12,6 @@ import {
 const EditPostForm = () => {
   const { postId } = useParams();
   const dispatch = useAppDispatch();
-  const [error, setError] = useState("");
   const postData = useAppSelector(selectAllPosts);
   const [editedPostVisibility, setEditedPostVisibility] = useState("public");
   const [editedTitle, setEditedTitle] = useState("");
@@ -23,11 +24,15 @@ const EditPostForm = () => {
         setEditedTitle(fetchedPost.title);
         setEditedContent(fetchedPost.content);
         setEditedPostVisibility(fetchedPost.postVisibility);
-
         console.log("Fetched post data:", fetchedPost);
       } catch (error) {
         console.error("Error fetching post:", error);
-        setError("An error occurred while fetching the post.");
+        return (
+          <div>
+            <h2>Error in Write a post page</h2>
+            <p>{globalErrors[400]}</p>
+          </div>
+        );
       }
     };
 
@@ -55,7 +60,8 @@ const EditPostForm = () => {
         alert("Post edited successfully!");
       }
     } catch (error) {
-      setError("An error occurred while editing the post.");
+      console.error("Error editing post:", error);
+      alert(globalErrors[404]);
     }
   };
 
@@ -67,7 +73,6 @@ const EditPostForm = () => {
     <div>
       <section>
         <h2>Edit the post</h2>
-        {error && <p>Error: {error}</p>}
         <form>
           Posting Status
           <label>

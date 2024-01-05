@@ -3,14 +3,21 @@ import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { addPost as addPostAction } from "../slices/postSlice";
 import { validateUserSession, selectUser } from "../slices/accountSlice";
 import { globalErrors } from "../utils/error";
-//testing
+import {
+  categoryListAsync,
+  selectAllCategories,
+} from "../slices/categorySlice";
+
 const AddPostForm = () => {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(selectUser);
+  const categories = useAppSelector(selectAllCategories);
+
   const [post, setPost] = useState({
     title: "",
     content: "",
     postVisibility: "public",
+    category: "",
   });
 
   const handleVisibilityChange = (e) => {
@@ -21,6 +28,8 @@ const AddPostForm = () => {
   };
   useEffect(() => {
     dispatch(validateUserSession());
+    dispatch(categoryListAsync());
+    console.log("categories?! ", categories);
   }, [dispatch]);
 
   if (!userInfo) {
@@ -47,6 +56,7 @@ const AddPostForm = () => {
         title: "",
         content: "",
         postVisibility: "public",
+        category: "",
       });
     }
   };
@@ -83,6 +93,18 @@ const AddPostForm = () => {
               />
               Private
             </label>
+            <select
+              name="category"
+              value={post.category}
+              onChange={(e) => setPost({ ...post, category: e.target.value })}
+            >
+              <option value="">Select a category</option>
+              {categories?.categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
             <label htmlFor="postTitle">Title:</label>
             <input
               type="text"

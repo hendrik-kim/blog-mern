@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { deletePost } from "../slices/postSlice";
 import { useAppDispatch } from "../store/configureStore";
-import { deletePost, getPostById } from "../slices/postSlice";
 import usePosts from "../hooks/usePosts";
 
 const Posting = ({ postVisibility, showButtons = false }) => {
@@ -14,8 +14,10 @@ const Posting = ({ postVisibility, showButtons = false }) => {
     alert("Post deleted!");
   };
   const handleUpdate = (postId) => {
-    dispatch(getPostById(postId));
     navigate(`/edit-post/${postId}`);
+  };
+  const handleRedirect = (postId) => {
+    navigate(`/post-detail/${postId}`);
   };
 
   return (
@@ -23,12 +25,11 @@ const Posting = ({ postVisibility, showButtons = false }) => {
       {publicPosting.length > 0 ? (
         publicPosting.map((post, i) => (
           <article key={i}>
-            <h3>title: {post.title}</h3>
-            {/* TODO: change userid to username once duplicate check is done */}
-            <p>user id: {post.user}</p>
-            <h4>visibility: {post.postVisibility}</h4>
-            <p>content: {post.content}</p>
-            <p>posting time: {post.timestamp}</p>
+            <div onClick={() => handleRedirect(post._id)}>
+              <h3>title: {post.title}</h3>
+              {/* TODO: change userid to username once duplicate check is done */}
+              <p>user id: {post.user}</p>
+            </div>
             {showButtons && (
               <>
                 <button onClick={() => handleDelete(post._id)}>Delete</button>
