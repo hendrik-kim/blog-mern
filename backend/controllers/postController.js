@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
+import Category from "../models/categoryModel.js";
 
 /**
  * @route   GET /api/posts
@@ -49,19 +50,26 @@ const deletePost = asyncHandler(async (req, res) => {
  * @access  Private
  */
 const createPost = asyncHandler(async (req, res) => {
-  const { userId, title, content, postVisibility, timestamp } = req.body;
-
+  const { userId, title, content, category, postVisibility, timestamp } =
+    req.body;
+  console.log("what Im getting ", req.body);
   if (!content || content.trim() === "") {
     res.status(400).json({ message: "Content cannot be empty" });
     return;
   }
 
   const user = await User.findById(userId);
+  const categoryID = await Category.findById(category);
+
+  if (!user || !category) {
+    res.status(400).json({ message: "User or Category not found" });
+    return;
+  }
 
   const post = new Post({
     user: user._id.toString(),
     title: title,
-    category: "test",
+    category: categoryID.name.toString(),
     content: content,
     postVisibility: postVisibility,
     timestamp: timestamp,

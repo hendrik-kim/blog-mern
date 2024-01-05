@@ -30,6 +30,7 @@ export const addPost = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const postAdd = await agent.Blog.createPost(data);
+      console.log("postSlice", postAdd);
       return postAdd;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -86,6 +87,11 @@ const postsSlice = createSlice({
       })
       .addCase(fetchAllPosts.pending, (state, action) => {
         // request start
+        return (state = {
+          ...state,
+          status: "idle",
+          foodLogs: action.payload,
+        });
       })
       .addCase(fetchAllPosts.fulfilled, (state, action) => {
         state.posts = action.payload;

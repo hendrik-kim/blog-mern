@@ -1,5 +1,5 @@
-import asyncHandler from 'express-async-handler';
-import Category from '../models/categoryModel.js';
+import asyncHandler from "express-async-handler";
+import Category from "../models/categoryModel.js";
 
 /**
  * @route   GET /api/categories
@@ -19,9 +19,10 @@ const getCategories = asyncHandler(async (req, res) => {
 const getCategoryById = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id);
   if (category) {
+    console.log("category controller ???", category);
     res.json(category);
   } else {
-    res.status(404).json({ message: 'Category not found' });
+    res.status(404).json({ message: "Category not found" });
   }
 });
 
@@ -33,8 +34,8 @@ const getCategoryById = asyncHandler(async (req, res) => {
 const createCategory = asyncHandler(async (req, res) => {
   const { name, parentId } = req.body;
 
-  if (!name || name.trim() === '') {
-    res.status(400).json({ message: 'Name cannot be empty' });
+  if (!name || name.trim() === "") {
+    res.status(400).json({ message: "Name cannot be empty" });
     return;
   }
 
@@ -63,7 +64,7 @@ const updateCategory = asyncHandler(async (req, res) => {
     const updatedCategory = await category.save();
     res.json(updatedCategory);
   } else {
-    res.status(404).json({ message: 'Category not found' });
+    res.status(404).json({ message: "Category not found" });
   }
 });
 
@@ -77,9 +78,9 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
   if (category) {
     await category.deleteOne();
-    res.json({ message: 'Category removed' });
+    res.json(category);
   } else {
-    res.status(404).json({ message: 'Category not found' });
+    res.status(404).json({ message: "Category not found" });
   }
 });
 

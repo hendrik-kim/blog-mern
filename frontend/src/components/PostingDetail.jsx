@@ -25,6 +25,7 @@ const PostDetail = () => {
         <article key={i}>
           <h1>Title: {post.title}</h1>
           <p>User id: {post.user}</p>
+          <p>Category: {post.category}</p>
           <p>Content: {post.content}</p>
           <p>Post Visibility: {post.postVisibility}</p>
           <p>Time Stamp: {post.timestamp}</p>
