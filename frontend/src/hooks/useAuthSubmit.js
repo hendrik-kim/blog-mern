@@ -98,8 +98,15 @@ const useAuthSubmit = (action, values) => {
           invalid: "Incorrect email or password. Please try again.",
         });
         break;
-      case globalErrors[409]:
-        setErrors({ invalid: "Account already exists. Please sign in." });
+      case "User already exists":
+        setErrors({
+          invalid: "Account already exists. Please sign in.",
+        });
+        break;
+      case "Username already exists":
+        setErrors({
+          invalid: "Username already exists. Please try different username.",
+        });
         break;
       default:
         setErrors({ invalid: errorMessage });

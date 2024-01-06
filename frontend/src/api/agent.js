@@ -47,8 +47,9 @@ axios.interceptors.response.use(
         redirect("/not-found");
         break;
       case 409:
-        store.dispatch(setErrorMessage(errorMessage));
-        redirect("/sign-up");
+        //Specify the 409 error case to display corresponding error message to user.
+        const error409Message = error.response.data.message;
+        store.dispatch(setErrorMessage(error409Message));
         break;
       case 500:
         store.dispatch(setErrorMessage(errorMessage));
