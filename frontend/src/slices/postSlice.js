@@ -30,7 +30,6 @@ export const addPost = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const postAdd = await agent.Blog.createPost(data);
-      console.log("postSlice", postAdd);
       return postAdd;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
