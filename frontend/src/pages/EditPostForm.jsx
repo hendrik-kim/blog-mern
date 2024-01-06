@@ -2,20 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../src/store/configureStore";
 import { globalErrors } from "../utils/error";
-
-import {
-  editPost,
-  getPostById,
-  selectAllPosts,
-} from "../../src/slices/postSlice";
+import { selectAllCategories } from "../../src/slices/categorySlice";
+import { editPost, getPostById } from "../../src/slices/postSlice";
 
 const EditPostForm = () => {
   const { postId } = useParams();
   const dispatch = useAppDispatch();
-  const postData = useAppSelector(selectAllPosts);
+  const categories = useAppSelector(selectAllCategories);
   const [editedPostVisibility, setEditedPostVisibility] = useState("public");
   const [editedTitle, setEditedTitle] = useState("");
   const [editedContent, setEditedContent] = useState("");
+  const [editedCategory, setEditedCategory] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,7 +21,7 @@ const EditPostForm = () => {
         setEditedTitle(fetchedPost.title);
         setEditedContent(fetchedPost.content);
         setEditedPostVisibility(fetchedPost.postVisibility);
-        console.log("Fetched post data:", fetchedPost);
+        setEditedCategory(fetchedPost.category);
       } catch (error) {
         console.error("Error fetching post:", error);
         return (
@@ -46,17 +43,22 @@ const EditPostForm = () => {
   const onSavePostClicked = async () => {
     try {
       if (postId) {
+        const selectedCategory = categories.categories.find(
+          (category) => category.name === editedCategory
+        );
         await dispatch(
           editPost({
             postId,
             title: editedTitle,
             content: editedContent,
+            category: selectedCategory,
             postVisibility: editedPostVisibility,
           })
         );
         setEditedContent("");
         setEditedTitle("");
         setEditedPostVisibility("public");
+        setEditedCategory("");
         alert("Post edited successfully!");
       }
     } catch (error) {
@@ -64,11 +66,6 @@ const EditPostForm = () => {
       alert(globalErrors[404]);
     }
   };
-
-  if (!postData) {
-    return <h2>Post not found!</h2>;
-  }
-
   return (
     <div>
       <section>
@@ -95,6 +92,18 @@ const EditPostForm = () => {
             />
             Private
           </label>
+          <select
+            name="category"
+            value={editedCategory}
+            onChange={(e) => setEditedCategory(e.target.value)}
+          >
+            <option value="">Select a category</option>
+            {categories?.categories.map((category) => (
+              <option key={category._id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
           <label htmlFor="postTitle">Title:</label>
           <input
             type="text"

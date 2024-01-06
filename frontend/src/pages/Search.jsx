@@ -25,6 +25,7 @@ const Search = () => {
         onChange={(e) => setSearchType(e.target.value)}
       >
         <option value="title">Title</option>
+        <option value="username">Username</option>
       </select>
       <button onClick={handleSearch}>Search</button>
 
@@ -33,7 +34,7 @@ const Search = () => {
           searchResults.map((post, i) => (
             <article key={i}>
               <h3>title: {post.title}</h3>
-              <p>user id: {post.user}</p>
+              <p>user id: {post.username}</p>
               <h4>visibility: {post.postVisibility}</h4>
               <p>content: {post.content}</p>
               <p>posting time: {post.timestamp}</p>
