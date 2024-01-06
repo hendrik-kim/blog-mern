@@ -27,7 +27,7 @@ const Posting = ({ postVisibility, showButtons = false }) => {
           <article key={i}>
             <div onClick={() => handleRedirect(post._id)}>
               <h3>title: {post.title}</h3>
-              <p>user id: {post.username}</p>
+              <p>username: {post.username}</p>
             </div>
             {showButtons && (
               <>

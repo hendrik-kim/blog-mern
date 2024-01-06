@@ -34,10 +34,7 @@ const Search = () => {
           searchResults.map((post, i) => (
             <article key={i}>
               <h3>title: {post.title}</h3>
-              <p>user id: {post.username}</p>
-              <h4>visibility: {post.postVisibility}</h4>
-              <p>content: {post.content}</p>
-              <p>posting time: {post.timestamp}</p>
+              <p>Username: {post.username}</p>
             </article>
           ))
         ) : (
