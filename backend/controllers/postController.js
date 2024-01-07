@@ -52,7 +52,6 @@ const deletePost = asyncHandler(async (req, res) => {
 const createPost = asyncHandler(async (req, res) => {
   const { userId, title, content, category, postVisibility, timestamp } =
     req.body;
-  console.log("what Im getting ", req.body);
   if (!content || content.trim() === "") {
     res.status(400).json({ message: "Content cannot be empty" });
     return;
@@ -68,6 +67,7 @@ const createPost = asyncHandler(async (req, res) => {
 
   const post = new Post({
     user: user._id.toString(),
+    username: user.username.toString(),
     title: title,
     category: categoryID.name.toString(),
     content: content,
@@ -87,11 +87,12 @@ const createPost = asyncHandler(async (req, res) => {
 const updatePost = asyncHandler(async (req, res) => {
   const { title, imageUrl, category, content, postVisibility } = req.body;
   const post = await Post.findById(req.params.id);
-
+  const categoryID = await Category.findById(category);
   if (post) {
     post.title = title || post.title;
     post.imageUrl = imageUrl || post.imageUrl;
-    post.category = category || post.category;
+    post.category =
+      categoryID.name.toString() || post.categoryID.name.toString();
     post.content = content || post.content;
     post.postVisibility = postVisibility || post.postVisibility;
 
