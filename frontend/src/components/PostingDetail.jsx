@@ -19,12 +19,13 @@ const PostDetail = () => {
   const filteredPosts = Array.isArray(posts.posts)
     ? posts.posts.filter((post) => post._id === postId)
     : [];
+
   return (
     <div>
       {filteredPosts.map((post, i) => (
         <article key={i}>
           <h1>Title: {post.title}</h1>
-          <p>User id: {post.user}</p>
+          <p>User name: {post.username}</p>
           <p>Category: {post.category}</p>
           <p>Content: {post.content}</p>
           <p>Post Visibility: {post.postVisibility}</p>
