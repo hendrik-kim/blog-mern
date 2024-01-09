@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import usePosts from "../hooks/usePosts";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("title");
   const [searchResults, setSearchResults] = useState([]);
   const { searchedPosting } = usePosts("public", searchTerm, searchType);
+  const navigate = useNavigate();
 
   const handleSearch = () => {
     setSearchResults(searchedPosting);
+  };
+  const handleRedirect = (postId) => {
+    navigate(`/post-detail/${postId}`);
   };
 
   return (
@@ -33,8 +38,10 @@ const Search = () => {
         {searchResults.length > 0 ? (
           searchResults.map((post, i) => (
             <article key={i}>
-              <h3>title: {post.title}</h3>
-              <p>Username: {post.username}</p>
+              <div onClick={() => handleRedirect(post._id)}>
+                <h3>title: {post.title}</h3>
+                <p>Username: {post.username}</p>
+              </div>
             </article>
           ))
         ) : (
