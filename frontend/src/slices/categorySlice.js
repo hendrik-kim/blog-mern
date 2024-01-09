@@ -6,7 +6,6 @@ export const categoryListAsync = createAsyncThunk(
   async () => {
     try {
       const response = await agent.Category.getCategories();
-      console.log("categorySlice", response);
       return response;
     } catch (error) {
       throw new Error(error);
@@ -19,7 +18,6 @@ export const getCategoryById = createAsyncThunk(
   async (data) => {
     try {
       const response = await agent.Category.getCategoryById(data);
-      console.log("get Category by id in slice", response);
       return response;
     } catch (error) {
       throw new Error(error);

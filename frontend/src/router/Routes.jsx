@@ -10,6 +10,7 @@ import CategoryList from "../pages/CategoryList";
 import EditPostForm from "../pages/EditPostForm";
 import PostingDetail from "../components/PostingDetail";
 import Search from "../pages/Search";
+import { useSelector } from "react-redux";
 
 const NoMatch = () => {
   return <h1>This path hasn't been developed!</h1>;
@@ -18,6 +19,10 @@ const NoMatch = () => {
 {
   /* TODO: Need to organize the paths. Will need user/post id  & nested routes  */
 }
+const ProtectedCategoryList = () => {
+  const user = useSelector((state) => state.user);
+  return user && user.isAdmin ? <CategoryList /> : <NoMatch />;
+};
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +33,7 @@ export const router = createBrowserRouter([
       // { path: '/category', element: <CategoryList /> },
       // { path: 'blog-post', element: <BlogPostForm /> },
       { path: "/", element: <Home /> },
-      { path: "category", element: <CategoryList /> },
+      { path: "category", element: <ProtectedCategoryList /> }, // Use the ProtectedCategoryList component
       { path: "new-post", element: <AddPostForm /> },
       { path: "/edit-post/:postId", element: <EditPostForm /> },
       { path: "search", element: <Search /> },

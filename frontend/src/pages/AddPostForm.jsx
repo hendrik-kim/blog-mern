@@ -29,7 +29,6 @@ const AddPostForm = () => {
   useEffect(() => {
     dispatch(validateUserSession());
     dispatch(categoryListAsync());
-    console.log("categories?! ", categories);
   }, [dispatch]);
 
   if (!userInfo) {

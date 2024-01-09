@@ -25,7 +25,7 @@ const PostDetail = () => {
       {filteredPosts.map((post, i) => (
         <article key={i}>
           <h1>Title: {post.title}</h1>
-          <p>User name: {post.username}</p>
+          <p>username: {post.username}</p>
           <p>Category: {post.category}</p>
           <p>Content: {post.content}</p>
           <p>Post Visibility: {post.postVisibility}</p>

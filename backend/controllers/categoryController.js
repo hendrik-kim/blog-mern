@@ -19,7 +19,6 @@ const getCategories = asyncHandler(async (req, res) => {
 const getCategoryById = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id);
   if (category) {
-    console.log("category controller ???", category);
     res.json(category);
   } else {
     res.status(404).json({ message: "Category not found" });
