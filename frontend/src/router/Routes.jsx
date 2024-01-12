@@ -7,6 +7,8 @@ import Register from "../pages/Register";
 import Home from "../pages/Home";
 import Mypage from "../pages/Mypage";
 import CategoryList from "../pages/CategoryList";
+import UserProfile from "../pages/UserProfile";
+
 import EditPostForm from "../pages/EditPostForm";
 import PostingDetail from "../components/PostingDetail";
 import Search from "../pages/Search";
@@ -34,6 +36,7 @@ export const router = createBrowserRouter([
       { path: "search", element: <Search /> },
       { path: "my-page", element: <Mypage /> },
       { path: "/post-detail/:postId", element: <PostingDetail /> },
+      { path: "profile", element: <UserProfile /> },
       { path: "sign-in", element: <SignIn /> },
       { path: "sign-up", element: <Register /> },
       { path: "*", element: <NoMatch /> },

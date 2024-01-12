@@ -110,11 +110,22 @@ const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (user) {
-    user.username = req.body.username || user.username;
-    user.email = req.body.email || user.email;
-    if (req.body.password) {
-      user.password = req.body.password;
+    if (req.body.username) {
+      const usernameExists = await User.findOne({
+        username: req.body.username,
+      });
+
+      if (usernameExists) {
+        res.status(409).json({ message: "Username already exists" });
+        throw new Error("Username already exists");
+      }
+
+      user.username = req.body.username || user.username;
     }
+    user.profileImage = req.body.profileImage || user.profileImage || "";
+    user.bio = req.body.bio || user.bio || "";
+
+    //TODO: add change password feature.
 
     const updatedUser = await user.save();
 
@@ -123,6 +134,8 @@ const updateUser = asyncHandler(async (req, res) => {
       username: updatedUser.username,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      bio: updatedUser.bio,
+      profileImage: updatedUser.profileImage,
     });
   } else {
     res.status(404).json({ message: "User not found" });

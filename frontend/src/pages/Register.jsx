@@ -61,7 +61,7 @@ function Register() {
                     <li>At least one lower case letter</li>
                     <li>At least one upper case letter</li>
                     <li>At least one special character among '@$!%*?&'</li>
-                    <li>At least 8 characters</li>
+                    <li>At least one numeric value</li>
                   </ul>
                 </div>
               ) : (

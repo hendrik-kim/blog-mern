@@ -7,8 +7,9 @@ const initialState = {
   user: {
     email: "",
     isAdmin: null,
-    isOAuthUser: null,
     username: "",
+    profileImage: "",
+    bio: "",
     _id: "",
   },
   isAuthenticated: false,
@@ -77,6 +78,19 @@ export const validateUserSession = createAsyncThunk(
   }
 );
 
+export const editUserProfile = createAsyncThunk(
+  "user/editUserProfile",
+  async (data, thunkAPI) => {
+    try {
+      const { userId, ...userProfile } = data;
+      const profileEdit = await agent.Account.updateUser(userId, userProfile);
+      return profileEdit;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -115,11 +129,18 @@ const userSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = false;
       })
+      .addCase(editUserProfile.fulfilled, (state, action) => {
+        state.user = action.payload;
+        localStorage.setItem("bio", action.payload.bio);
+        alert("Updated!");
+        window.location.reload();
+      })
       .addCase(signOutUser.fulfilled, (state, action) => {
         state.user = null;
         state.isAuthenticated = false;
         storage.removeItem("persist:account");
         storage.removeItem("user");
+        localStorage.removeItem("bio");
       })
       .addCase(signOutUser.rejected, (state, action) => {
         // TODO: Handle sign-out error

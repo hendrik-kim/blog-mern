@@ -85,6 +85,7 @@ const agent = {
       window.location.href = `${process.env.REACT_APP_API_URL}auth/google`;
     },
     validateSession: () => requests.get("/auth/validate"),
+    updateUser: (id, user) => requests.put(`/users/${id}`, user),
   },
   Blog: {
     getPosts: () => requests.get("/posts"),

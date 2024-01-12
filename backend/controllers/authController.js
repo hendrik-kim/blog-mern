@@ -29,9 +29,15 @@ const validateToken = asyncHandler(async (req, res) => {
 
     const user = await User.findOne(
       { _id: decoded.userId },
-      { _id: 1, username: 1, email: 1, isAdmin: 1, isOAuthUser: 1 } //return all necessary fields.
+      {
+        googleId: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+        password: 0,
+        isOAuthUser: 0,
+      } //return all properties except unnecessary ones.
     );
-
     return res.json({ isAuthenticated: true, user: user });
   });
 });

@@ -15,11 +15,14 @@ import postsReducer from "../slices/postSlice";
 import commonReducer from "../slices/commonSlice";
 import categoryReducer from "../slices/categorySlice";
 
-//Transform to only persist the username from user object
+//Transform to only persist the username and user profile image from user object
 const whitelistTransform = createTransform(
   (inboundState, key) => {
     if (key === "user" && inboundState !== undefined && inboundState !== null) {
-      return inboundState.username;
+      return {
+        username: inboundState.username,
+        profileImage: inboundState.profileImage,
+      };
     }
     return inboundState;
   },
@@ -29,7 +32,9 @@ const whitelistTransform = createTransform(
         email: "",
         isAdmin: null,
         isOAuthUser: null,
-        username: outBoundState,
+        username: outBoundState.username,
+        profileImage: outBoundState.profileImage,
+        bio: "",
         _id: "",
       };
     }
