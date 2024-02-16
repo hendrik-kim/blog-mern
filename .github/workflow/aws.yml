@@ -1,0 +1,68 @@
+name: Blog MERN project CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - release
+  pull_request:
+    branches:
+      - develop
+    types: [closed]
+
+env:
+  AWS_REGION: MY_AWS_REGION
+  ECR_REPOSITORY: MY_ECR_REPO
+  ECS_SERVICE: MY_ECS_SERVICE
+  ECS_CLUSTER: MY_ECS_CLUSTER
+  ECS_TASK_DEFINITION: MY_ECS_TASK_DEF
+  CONTAINER_NAME: MY_CONTAINER
+
+permissions:
+  contents: read
+
+jobs:
+  run_tests:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Dependencies
+        run: npm install
+      - name: Execute Tests
+        run: npm test
+
+  deployment:
+    needs: [run_tests]
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release' || github.ref == 'refs/heads/develop' || (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: AWS Credentials Setup
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: ECR Login
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build & Push Image
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+      - name: Update ECS Task Definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: ECS Deploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
